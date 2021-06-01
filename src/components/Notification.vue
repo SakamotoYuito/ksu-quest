@@ -12,14 +12,15 @@
 		</header>
 		<main>
 			<div v-if="!isShow" class="notification">
-				<p>通知</p><hr/>
+				<p class="header">通知</p>
 				<ul>
 					<div class="block" v-for="(sentence, index) in sentences" v-bind:key="index">
 						<li v-if="isDisplay[0]">
-								<img src="@/assets/robot.png" class="left">
+								<img src="@/assets/nao@3x.png" class="left">
+								<!-- <span class="icon--2"></span> -->
 						</li>
 						<li>
-							<a class="text--primary subheading">{{sentence}}<br/></a><hr/>
+							<a class="text--primary subheading">{{ sentence }}<br/></a>
 						</li>
 					</div>
 				</ul>
@@ -159,6 +160,16 @@ export default {
 </script>
 
 <style>
+/* .notification .header {
+	border-bottom: 1px solid white;
+	padding-top: 0px;
+	/* margin-bottom: 0.3em;
+	padding-bottom: 0.3em; 
+} */
+.notification ul {
+	border-top: 1.5px solid white;
+	padding-top: 3px;
+}
 .notification p {
 	font-size: 5vmin;
 	text-align: center;
@@ -166,14 +177,22 @@ export default {
 .notification a {
 	font-size: 4vmin;
 }
+.block {
+	border-bottom: 1.5px solid white;
+	margin-top: 0px;
+	padding-top: 0px;
+	margin-bottom: 0.3em;
+	padding-bottom: 0.3em;
+}
 .block a {
-	/* display: block;
-	margin-left: 5%;
-	text-align: left; */
 	vertical-align: middle;
 }
 .block img {
-	width: 10%;
+	/* position: relative;
+	bottom: 5px; */
+	width: 8%;
+	max-width: 35px;
+	min-width: 20px;
 	height: auto;
 }
 .text--primary {

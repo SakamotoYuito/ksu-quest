@@ -25,7 +25,6 @@ export default {
 	data() {
 		return {
 			userID: null,
-			// password: null,
 			feedback: null
 		}
 	},
