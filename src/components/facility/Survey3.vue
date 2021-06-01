@@ -217,13 +217,11 @@ export default {
 	z-index: 0;
 	margin-bottom: 60px;
 }
-[type="radio"]:not(:checked)+span:before, [type="radio"]:not(:checked)+span:after {
-    border: 2px solid white;
+[type="checkbox"]+span:not(.lever):before, [type="checkbox"]:not(.filled-in)+span:not(.lever):after {
+	border: 2px solid white;
 }
-[type="radio"]:checked+span:after, [type="radio"].with-gap:checked+span:after {
-    background-color: lime;
-}
-[type="radio"]:checked+span:after, [type="radio"].with-gap:checked+span:before, [type="radio"].with-gap:checked+span:after {
-    border: 2px solid lime;
+[type="checkbox"]:checked+span:not(.lever):before {
+	border-right: 2px solid lime;
+	border-bottom: 2px solid lime;
 }
 </style>
