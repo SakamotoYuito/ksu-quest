@@ -13,9 +13,9 @@
 		<main>
 			<div v-if="!isShow" class="title">
 				<p>QRコードリーダー</p>
-			</div>
-			<div v-if="!isShow" class="reader">
-				<qrcode-stream @init="onInit" @decode="onDecode"></qrcode-stream>
+				<div v-if="!isShow" class="reader">
+					<qrcode-stream @init="onInit" @decode="onDecode"></qrcode-stream>
+				</div>
 			</div>
 			<div v-if="isShow" class="loader">Loading...</div>
 		</main>
@@ -116,13 +116,15 @@ export default {
 </script>
 
 <style>
+.title {
+	margin-top: 50px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-bottom: 60px;
+}
 .title p {
 	font-size: 7vmin;
 	text-align: center;
-	padding-top: 50px;
-}
-.reader main {
-	position: relative;
 }
 .reader main a {
 	text-align: center;
@@ -136,15 +138,11 @@ export default {
 	left: 0;
 }
 .reader {
-	position: absolute;  /*要素を浮かす*/
-	/*relativeを指定した親要素を支点とした位置をすべて0に指定↓*/
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	margin: auto; /*上下左右中央に*/
-	width: 40vmax; /*widthの指定は必須*/
-	height: 40vmax; /*heightの指定は必須*/
+	margin: auto;
+	width: 60vmin;
+	height: 60vmin;
 	border: solid 3px white;
+	max-height: 400px;
+	max-width: 400px;
 }
 </style>

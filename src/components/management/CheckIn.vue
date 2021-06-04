@@ -49,17 +49,17 @@ export default {
 			this.user = firebase.auth().currentUser
 			this.uid = this.user.uid
 			if(this.user) {
-				setTimeout(() => {
-					db.collection('users')
-						.where('uid', '==', this.uid).get().then(snapshot => {
-							snapshot.forEach(document => {
-								this.docID = document.id
-							})
-						}).then(() => {
-							db.collection('users').doc(this.docID).update({
-								checkIn: true
-							})
+				db.collection('users')
+					.where('uid', '==', this.uid).get().then(snapshot => {
+						snapshot.forEach(document => {
+							this.docID = document.id
 						})
+					}).then(() => {
+						db.collection('users').doc(this.docID).update({
+							checkIn: true
+						})
+					})
+				setTimeout(() => {
 					this.$router.push({ name: 'Status' })
 				},3000)
 			} else {

@@ -17,7 +17,6 @@
 					<div class="block" v-for="(sentence, index) in sentences" v-bind:key="index">
 						<li v-if="isDisplay[0]">
 								<img src="@/assets/nao@3x.png" class="left">
-								<!-- <span class="icon--2"></span> -->
 						</li>
 						<li>
 							<a class="text--primary subheading">{{ sentence }}<br/></a>
@@ -160,12 +159,6 @@ export default {
 </script>
 
 <style>
-/* .notification .header {
-	border-bottom: 1px solid white;
-	padding-top: 0px;
-	/* margin-bottom: 0.3em;
-	padding-bottom: 0.3em; 
-} */
 .notification ul {
 	border-top: 1.5px solid white;
 	padding-top: 3px;
@@ -178,21 +171,19 @@ export default {
 	font-size: 4vmin;
 }
 .block {
-	border-bottom: 1.5px solid white;
+	border-bottom: 1.8px solid white;
 	margin-top: 0px;
 	padding-top: 0px;
-	margin-bottom: 0.3em;
-	padding-bottom: 0.3em;
+	margin-bottom: 0.9em;
+	padding-bottom: 0.5em;
 }
 .block a {
-	vertical-align: middle;
+	font-size: min(4vmin, 18px);
 }
 .block img {
-	/* position: relative;
-	bottom: 5px; */
-	width: 8%;
-	max-width: 35px;
-	min-width: 20px;
+	width: 7vmin;
+	max-width: 30px;
+	min-width: 21px;
 	height: auto;
 }
 .text--primary {

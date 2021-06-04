@@ -13,7 +13,16 @@
 		<main>
 			<div v-if="!isShow">
 				<div class="notification">
-					<p>{{ courseName }}</p>
+					<p v-if="courseName=='Network'">魔獣 パケットロス</p>
+					<p v-if="courseName=='Securiry'">魔獣 トロイの木馬</p>
+					<p v-if="courseName=='DataScience'">魔獣 ビックデータ</p>
+					<p v-if="courseName=='Robot'">魔獣 ユーザビリティ</p>
+					<p v-if="courseName=='Infrastructure'">魔獣 OS（オーエス）</p>
+					<p v-if="courseName=='IoT'">魔獣 RAM（ラム）</p>
+					<p v-if="courseName=='Fabrication'">魔獣 ファブ社会</p>
+					<p v-if="courseName=='Brain'">魔獣 筋電義手</p>
+					<p v-if="courseName=='Media'">魔獣 コンピュータグラフィックス</p>
+					<p v-if="courseName=='SE'">魔獣 bit（ビット）</p>
 					<p>解答</p>
 				</div>
 				<div class="center-align">
@@ -31,8 +40,57 @@
 			<div v-if="isCorrect" class="circle">
 				<a/>
 			</div>
-			<div v-if="isCorrect && courseName=='Network'">
-				<p>ネットワークとはaaaaaaa<br/>aaaa</p>
+			<div class="course center">
+				<div v-if="isCorrect && courseName=='Network'">
+					<p>スキル <a>ネットワークシステム</a><br/>を手に入れた！</p>
+					<p>解説を読んだら、下の 戻るボタン を押してステータスを確認しよう。</p>
+					<img src="@/assets/courseIcon/Network.png" class="courseImg center">
+				</div>
+				<div v-if="isCorrect && courseName=='Security'">
+					<p>スキル <a>情報セキュリティ</a><br/>を手に入れた！</p>
+					<p>解説を読んだら、下の 戻るボタン を押してステータスを確認しよう。</p>
+					<img src="@/assets/courseIcon/Security.png" class="courseImg center">
+				</div>
+				<div v-if="isCorrect && courseName=='DataScience'">
+					<p>スキル <a>データサイエンス</a><br/>を手に入れた！</p>
+					<p>解説を読んだら、下の 戻るボタン を押してステータスを確認しよう。</p>
+					<img src="@/assets/courseIcon/DataScience.png" class="courseImg center">
+				</div>
+				<div v-if="isCorrect && courseName=='Robot'">
+					<p>スキル <a>ロボットインタラクション</a><br/>を手に入れた！</p>
+					<p>解説を読んだら、下の 戻るボタン を押してステータスを確認しよう。</p>
+					<img src="@/assets/courseIcon/Robot.png" class="courseImg center">
+				</div>
+				<div v-if="isCorrect && courseName=='Infrastructure'">
+					<p>スキル <a>コンピュータ基盤設計</a><br/>を手に入れた！</p>
+					<p>解説を読んだら、下の 戻るボタン を押してステータスを確認しよう。</p>
+					<img src="@/assets/courseIcon/Infrastructure.png" class="courseImg center">
+				</div>
+				<div v-if="isCorrect && courseName=='IoT'">
+					<p>スキル <a>組込みシステム</a><br/>を手に入れた！</p>
+					<p>解説を読んだら、下の 戻るボタン を押してステータスを確認しよう。</p>
+					<img src="@/assets/courseIcon/IoT.png" class="courseImg center">
+				</div>
+				<div v-if="isCorrect && courseName=='Fabrication'">
+					<p>スキル <a>デジタルファブリケーション</a><br/>を手に入れた！</p>
+					<p>解説を読んだら、下の 戻るボタン を押してステータスを確認しよう。</p>
+					<img src="@/assets/courseIcon/Fabrication.png" class="courseImg center">
+				</div>
+				<div v-if="isCorrect && courseName=='Brain'">
+					<p>スキル <a>脳科学</a><br/>を手に入れた！</p>
+					<p>解説を読んだら、下の 戻るボタン を押してステータスを確認しよう。</p>
+					<img src="@/assets/courseIcon/Brain.png" class="courseImg center">
+				</div>
+				<div v-if="isCorrect && courseName=='Media'">
+					<p>スキル <a>メディア処理技術</a><br/>を手に入れた！</p>
+					<p>解説を読んだら、下の 戻るボタン を押してステータスを確認しよう。</p>
+					<img src="@/assets/courseIcon/Media.png" class="courseImg center">
+				</div>
+				<div v-if="isCorrect && courseName=='SE'">
+					<p>スキル <a>情報システム</a><br/>を手に入れた！</p>
+					<p>解説を読んだら、下の 戻るボタン を押してステータスを確認しよう。</p>
+					<img src="@/assets/courseIcon/SE.png" class="courseImg center">
+				</div>
 			</div>
 			<div v-if="isShow && !isCorrect" class="loader">Loading...</div>
 		</main>
@@ -107,7 +165,7 @@ export default {
 				this.isCorrect = true
 				this.isShow = true
 			} else {
-				this.feedback = '解答が間違っているよ。わからないときは、スタッフに聞いてみよう。'
+				this.feedback = '解答が間違っています！わからないときは、スタッフに聞いてみよう。'
 			}
 		},
 		back() {
@@ -151,5 +209,18 @@ export default {
 	border: 12px solid red;
 	border-radius: 50%;
 	line-height: 80px;
+}
+.courseImg {
+	width: 70%;
+	height: auto;
+	max-width: 300px;
+	padding-bottom: 50px;
+}
+.course p {
+	font-size: clamp(15px, 5vmin, 50px);
+	;
+}
+.course a {
+	color: Yellow;
 }
 </style>

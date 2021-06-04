@@ -11,7 +11,6 @@ export default {
 </script>
 
 <style>
-@import "./assets/style.css";
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -27,11 +26,9 @@ export default {
 a, p {
   color: white;
   font-family: 'PixelMplus12-Bold';
-	src: url('~@/assets/fonts/PixelMplus12-Bold.ttf');
 }
 body {
   background-color: #10308B;
-  /* padding-top: 50px; */
 }
 header {
   z-index: 99;
@@ -58,8 +55,8 @@ img {
 }
 main {
   padding-top: 60px;
-  padding-left: 8vmax;
-  padding-right: 8vmax; 
+  padding-left: 5vmax;
+  padding-right: 5vmax; 
   padding-bottom: 60px;
 }
 .loader,

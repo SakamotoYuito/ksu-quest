@@ -16,6 +16,9 @@
 			<div v-if="isNotification" class="blinking notice center-align">
 				<p>通知が来ています</p>
 			</div>
+			<div v-if="!isNotification && !isShow" class="center-align">
+				<p v-if="isCheckIn">クエストⅣ：チェックイン中</p>
+			</div>
 			<div v-if="!isShow" class="chart-container">
 				<RadarChart class="radar" :chartData="datacollection" :options="options"/>
 			</div>
@@ -74,6 +77,7 @@ export default {
 		return {
 			user: null,
 			userID: null,
+			isCheckIn: false,
 			Network: 0,
 			Security: 0,
 			DataScience: 0,
@@ -141,7 +145,7 @@ export default {
 					.where('uid', '==', user.uid).get().then(snapshot => {
 						snapshot.forEach(document => {
 							this.userID = document.data().user_id
-							// this.noticeList = document.data().noticeList
+							this.isCheckIn = document.data().checkIn
 							this.Network = document.data().Network
 							this.Security = document.data().Security
 							this.DataScience = document.data().DataScience
@@ -288,6 +292,7 @@ export default {
 }
 .chart-container {
 	width: 100%;
+	padding-bottom: 100%;
 }
 .container {
 	display: flex;
@@ -304,8 +309,7 @@ export default {
 }
 .chartjs-render-monitor {
 	position: absolute;
-	top: 15%;
-
+	top: max(20%, 100px);
 }
 .radar {
 	height: 100%;
@@ -313,6 +317,10 @@ export default {
 	width: 100%;
 	justify-content: center;
 	align-items: center;
+	max-width: 400px;
+	max-height: 400px;
+	margin-left: auto;
+  margin-right: auto;
 }
 
 .blinking {
