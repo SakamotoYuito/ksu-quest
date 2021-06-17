@@ -14,7 +14,7 @@
 			<div v-if="!isShow">
 				<div class="notification">
 					<p v-if="courseName=='Network'">魔獣 パケットロス</p>
-					<p v-if="courseName=='Securiry'">魔獣 トロイの木馬</p>
+					<p v-if="courseName=='Security'">魔獣 トロイの木馬</p>
 					<p v-if="courseName=='DataScience'">魔獣 ビックデータ</p>
 					<p v-if="courseName=='Robot'">魔獣 ユーザビリティ</p>
 					<p v-if="courseName=='Infrastructure'">魔獣 OS（オーエス）</p>

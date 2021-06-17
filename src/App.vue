@@ -1,13 +1,13 @@
 <template>
   <div class="app">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App',
-}
+  name: "App",
+};
 </script>
 
 <style>
@@ -20,15 +20,16 @@ export default {
   margin-top: 60px;
 }
 @font-face {
-	font-family: 'PixelMplus12-Bold';
-	src: url('~@/assets/fonts/PixelMplus12-Bold.ttf');
+  font-family: "PixelMplus12-Bold";
+  src: url("~@/assets/fonts/PixelMplus12-Bold.ttf");
 }
-a, p {
+a,
+p {
   color: white;
-  font-family: 'PixelMplus12-Bold';
+  font-family: "PixelMplus12-Bold";
 }
 body {
-  background-color: #10308B;
+  background-color: #10308b;
 }
 header {
   z-index: 99;
@@ -37,26 +38,25 @@ header {
   width: 100%;
 }
 .brand-logo {
-	width: 150px;
-	height: 42px;
+  width: 150px;
+  height: 42px;
 }
 img {
-	width: 5vmin;
-	height: 5vmin;
-	margin: 5px;
-	margin-right: 10px;
-	
+  width: 5vmin;
+  height: 5vmin;
+  margin: 5px;
+  margin-right: 10px;
 }
 .nav-wrapper {
-	background-color: black;
+  background-color: black;
 }
 .nav-wrapper a {
-	font-size: 3vmin;
+  font-size: 3vmin;
 }
 main {
   padding-top: 60px;
   padding-left: 5vmax;
-  padding-right: 5vmax; 
+  padding-right: 5vmax;
   padding-bottom: 60px;
 }
 .loader,
@@ -101,10 +101,10 @@ main {
   }
 }
 footer {
-	position: fixed;
-	bottom: 0;
-	width: 100%;
-	background-color: black;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: black;
   display: block;
   text-align: center;
 }
