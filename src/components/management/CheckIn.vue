@@ -38,7 +38,8 @@ export default {
 		return {
 			user: null,
 			uid: null,
-			docID: null
+			docID: null,
+			noticeList: []
 		}
 	},
 	created() {
@@ -53,10 +54,14 @@ export default {
 					.where('uid', '==', this.uid).get().then(snapshot => {
 						snapshot.forEach(document => {
 							this.docID = document.id
+							this.noticeList.push(document.data().noticeList)
 						})
 					}).then(() => {
+						this.noticeList[0][0].isDisplay = true
+						console.log(this.noticeList)
 						db.collection('users').doc(this.docID).update({
-							checkIn: true
+							checkIn: true,
+							noticeList: this.noticeList[0]
 						})
 					})
 				setTimeout(() => {

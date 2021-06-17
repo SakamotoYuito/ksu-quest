@@ -19,7 +19,7 @@
 					<option value="0" selected>全参加者</option>
 					<option value="1">2問以上解答</option>
 					<option value="2">3問以上解答</option>
-					<option value="3">Question1を解答</option>
+					<option value="3">5問以上解答</option>
 				</select>
 				<a class="right col s2">{{ required }}/{{ joinNumber }}人参加</a>
 				<div class="switch col s3">
@@ -34,6 +34,7 @@
 			<div v-if="!isShow" class="scroll">
 				<table>
 					<thead>
+						<th>checked</th>
 						<th>userID</th>
 						<th>checkIn</th>
 						<th>mystery</th>
@@ -43,6 +44,12 @@
 					</thead>
 					<tbody>
 						<tr v-for="item in dataList" :key="item.userID">
+							<td>
+								<label>
+									<input type="checkbox" class="filled-in" v-model="item.checked" />
+									<span></span>
+								</label>
+							</td>
 							<td>{{ item.userID }}</td>
 							<td>{{ item.checkIn }}</td>
 							<td>{{ item.mystery }}</td>
@@ -73,9 +80,10 @@ export default {
 	data() {
 		return {
 			userID: null,
+			checked: false,
 			feedback: null,
 			isShow: true,
-			roop: true,
+			roop: false,
 			selected: null,
 			required: 0,
 			joinNumber: 0,
@@ -90,11 +98,6 @@ export default {
 			number: null
 		}
 	},
-	mounted () {
-		this.intervalId = setInterval(() => {
-			this.makeList()
-		}, 5000)
-  },
   beforeDestroy () {
 		if(!this.roop) {
 			clearInterval(this.intervalId)
@@ -107,6 +110,8 @@ export default {
 		roop: function() {
 			if(!this.roop) {
 				clearInterval(this.intervalId)
+				console.log(this.roop)
+				console.log("expected false")
 			} else {
 				this.intervalId = setInterval(() => {
 					this.makeList()
@@ -123,23 +128,29 @@ export default {
 			this.searchItem = null
 			db.collection('users').get().then(snapshot => {
 				snapshot.forEach(document => {
-					if(this.selected == 1) {
-						if(document.data().mysteryCounter >= 2) {
+
+					if(document.data().checkIn){
+						if(this.selected == 1) {
+							if(document.data().mysteryCounter >= 2) {
+								this.pushDataList(document)
+								this.required += 1
+							}
+						} else if(this.selected == 2) {
+							if(document.data().mysteryCounter >= 3) {
+								this.pushDataList(document)
+								this.required += 1
+							}
+						} else if(this.selected == 0) {
 							this.pushDataList(document)
-							this.required += 1
+							if(document.data().checkIn) {
+								this.required += 1
+							}
+						} else if(this.selected == 3) {
+							if(document.data().mysteryCounter >= 5) {
+								this.pushDataList(document)
+								this.required += 1
+							}
 						}
-					} else if(this.selected == 2) {
-						if(document.data().mysteryCounter >= 3) {
-							this.pushDataList(document)
-							this.required += 1
-						}
-					} else if(this.selected == 0) {
-						this.pushDataList(document)
-						if(document.data().checkIn) {
-							this.required += 1
-						}
-					}
-					if(document.data().checkIn) {
 						this.joinNumber += 1
 					}
 				})
@@ -153,7 +164,7 @@ export default {
 				snapshot.forEach(document => {
 					for(let i=0; i<this.dataList.length; i++) {
 						let data = this.dataList[i]
-						if(document.data().user_id == data.userID) {
+						if(document.data().user_id == data.userID && data.checked && data.checkIn) {
 							this.docIdList.push(document.id)
 							this.noticeList.push(document.data().noticeList)
 							this.checkInList.push(document.data().checkIn)
@@ -175,7 +186,9 @@ export default {
 						})
 					}
 				}
+				setTimeout(this.makeList, 2000)
 			})
+			console.log("通知しました．")
 		},
 		pushDataList(document) {
 			let point = 
@@ -185,6 +198,7 @@ export default {
 				document.data().Network + document.data().Robot +
 				document.data().SE + document.data().Security
 			this.dataList.push({
+				checked: this.checked,
 				userID: document.data().user_id,
 				checkIn: document.data().checkIn,
 				mystery: document.data().mysteryCounter,

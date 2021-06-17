@@ -174,7 +174,7 @@ export default {
 	border-bottom: 1.8px solid white;
 	margin-top: 0px;
 	padding-top: 0px;
-	margin-bottom: 0.9em;
+	margin-bottom: 0.5em;
 	padding-bottom: 0.5em;
 }
 .block a {
@@ -185,6 +185,7 @@ export default {
 	max-width: 30px;
 	min-width: 21px;
 	height: auto;
+	margin-bottom: 27px;
 }
 .text--primary {
 	font-family: 'PixelMplus12-Bold';
