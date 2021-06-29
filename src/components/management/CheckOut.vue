@@ -1,13 +1,6 @@
 <template>
 	<body>
-			<header>
-				<nav>
-					<div class="nav-wrapper">
-						<img src="@/assets/ksu-quest2.png" class="brand-logo">
 
-					</div>
-				</nav>
-			</header>
 		<main>
 			<div class="CheckOut">
 				<p>チェックアウトが<br/>完了しました！</p>

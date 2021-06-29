@@ -1,15 +1,5 @@
 <template>
 		<body>
-			<header>
-				<nav>
-					<div class="nav-wrapper">
-						<img src="@/assets/ksu-quest2.png" class="brand-logo">
-						<ul class="right">
-							<li><a>ログアウト</a></li>
-						</ul>
-					</div>
-				</nav>
-			</header>
 		<main>
 			<div class="loader">Loading...</div>
 		</main>

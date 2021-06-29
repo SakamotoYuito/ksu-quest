@@ -1,15 +1,5 @@
 <template>
 	<body>
-		<header>
-			<nav>
-				<div class="nav-wrapper">
-					<img src="@/assets/ksu-quest2.png" class="brand-logo">
-					<ul class="right">
-						<li><a @click="logout">ログアウト</a></li>
-					</ul>
-				</div>
-			</nav>
-		</header>
 		<main>
 			<div class="notification">
 				<p>メディアスタジオ</p><hr/>
@@ -38,17 +28,9 @@
 </template>
 
 <script>
-import firebase from 'firebase'
 export default {
 	name: 'MediaStudio',
 	methods: {
-		logout() {
-			firebase.auth().signOut().catch((error) => {
-				if (error.name === 'NavigationDuplicated') {
-					return
-				}
-			})
-		},
 	}
 }
 </script>

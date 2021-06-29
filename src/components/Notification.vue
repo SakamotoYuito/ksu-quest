@@ -1,15 +1,5 @@
 <template>
 	<body>
-		<header>
-			<nav>
-				<div class="nav-wrapper">
-					<img src="@/assets/ksu-quest2.png" class="brand-logo">
-					<ul class="right">
-						<li><a v-if="!isShow" @click="logout">ログアウト</a></li>
-					</ul>
-				</div>
-			</nav>
-		</header>
 		<main>
 			<div v-if="!isShow" class="notification">
 				<p class="header">通知</p>
@@ -70,20 +60,6 @@ export default {
 		this.getNotification()
 	},
 	methods: {
-		logout() {
-			if(!this.isClick) {
-				setTimeout(() => {
-					firebase.auth().signOut().catch((error) => {
-						if (error.name === 'NavigationDuplicated') {
-							return
-						}
-					})
-					}
-					,1000
-					)
-				this.isShow = true
-			}
-		},
 		getTime() {
 			const now = new Date()
 			this.time = now.getHours() + ":"

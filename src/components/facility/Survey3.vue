@@ -1,15 +1,5 @@
 <template>
 	<body>
-		<header>
-			<nav>
-				<div class="nav-wrapper">
-					<img src="@/assets/ksu-quest2.png" class="brand-logo">
-					<ul class="right">
-						<li><a v-if="!isShow" @click="logout">ログアウト</a></li>
-					</ul>
-				</div>
-			</nav>
-		</header>
 		<main>
 			<div v-if="!isShow">
 				<div class="notification">
@@ -110,7 +100,6 @@
 </template>
 
 <script>
-import firebase from 'firebase'
 export default {
 	name: 'Question1',
 	data() {
@@ -138,20 +127,6 @@ export default {
 		}
 	},
 	methods: {
-		logout() {
-			if(!this.isClick) {
-				setTimeout(() => {
-					firebase.auth().signOut().catch((error) => {
-						if (error.name === 'NavigationDuplicated') {
-							return
-						}
-					})
-					}
-					,1000
-				)
-				this.isShow = true
-			}
-		},
 		sendOut() {
 			let labName = this.$route.query.status
 			let courseName = []
