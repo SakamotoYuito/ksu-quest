@@ -4,13 +4,12 @@
 			<div v-if="isNotification" class="blinking notice center-align">
 				<p>通知が来ています</p>
 			</div>
-			<div v-if="!isNotification && !isShow" class="center-align">
+			<div v-if="!isNotification" class="center-align">
 				<p v-if="isCheckIn">クエストⅣ：チェックイン中</p>
 			</div>
-			<div v-if="!isShow" class="chart-container">
+			<div class="chart-container">
 				<RadarChart class="radar" :chartData="datacollection" :options="options"/>
 			</div>
-			<div v-if="isShow" class="loader">Loading...</div>
 		</main>
 		<footer>
 			<div class="container">
@@ -55,6 +54,7 @@
 import firebase from 'firebase'
 import db from '@/plugins/firebase'
 import RadarChart from '@/resources/RadarChart.js'
+import store from '@/store'
 
 export default {
 	name: 'Status',
@@ -115,7 +115,6 @@ export default {
 					fontFamily: 'PixelMplus12-Bold'
 				},
 			},
-			isShow: false,
 			isClick: false,
 			isCamera: false,
 			isBell: false,
@@ -129,11 +128,16 @@ export default {
 				this.user = user
 				this.uid = this.user.uid
 				this.listen(this.uid)
-				db.collection('users')
+				console.log("mounted was executed from: " + this.$route.from)
+				db.collection(this.$store.state.userCollection)
 					.where('uid', '==', user.uid).get().then(snapshot => {
 						snapshot.forEach(document => {
 							this.userID = document.data().user_id
 							this.isCheckIn = document.data().checkIn
+						})
+				}).then(() => {
+					db.collection(this.$store.state.statusCollection).where('uid', '==', user.uid).get().then(snapshot => {
+						snapshot.forEach(document => {
 							this.Network = document.data().Network
 							this.Security = document.data().Security
 							this.DataScience = document.data().DataScience
@@ -147,23 +151,30 @@ export default {
 						})
 					}).then(() => {
 						this.RadarChart()
-						this.checkNotification()
+					})
 				})
-	
 			} else {
 				this.user = null
 				this.$router.push({ name: 'Home'})
 			}
 		})
 	},
+	watch: {
+		isNotification: function() {
+			console.log(this.isNotification)
+		}
+	},
 	methods: {
 		listen(uid) {
-			db.collection("users").where("uid", "==", uid).onSnapshot(querySnapshot => {
-				querySnapshot.forEach(doc => {
-					this.noticeList = doc.data().noticeList
+			//if (this.$store.state.unsubscribeSnapshot == null){
+				let unsubscribe = db.collection(this.$store.state.statusCollection).where("uid", "==", uid).onSnapshot(querySnapshot => {
+					querySnapshot.forEach(doc => {
+						this.noticeList = doc.data().noticeList
+					})
+					this.checkNotification()
 				})
-				this.checkNotification()
-			})
+				store.commit('SET_UNSUBSCRIBE', unsubscribe)
+			// }
 		},
 		RadarChart() {
 			this.datacollection = {
@@ -204,24 +215,14 @@ export default {
 		},
 		reader() {
 			if(!this.isClick) {
-				setTimeout(() => {
-					this.$router.push({ name: 'Reader'})
-						}
-						,1000
-					)
-				this.isShow = true
+				this.$router.push({ name: 'Reader'})
 				this.isClick = true
 				this.isCamera = false
 			}
 		},
 		notification() {
 			if(!this.isClick) {
-				setTimeout(() => {
-					this.$router.push({ name: 'Notification'})
-					}
-					,1000
-					)
-				this.isShow = true
+				this.$router.push({ name: 'Notification'})
 				this.isClick = true
 				this.isBell = false
 			}
@@ -243,12 +244,15 @@ export default {
 			}
 		},
 		checkNotification() {
+			console.log(this.noticeList)
 			if(this.noticeList) {
 				for(let i=0; i<Object.keys(this.noticeList).length; i++) {
 					if(!this.noticeList[i].isRead && this.noticeList[i].isDisplay) {
+						console.log('isNotification is true')
 						this.isNotification = true
 						break
 					} else {
+						console.log('isNotification is false')
 						this.isNotification = false
 					}
 				}

@@ -1,8 +1,8 @@
 <template>
   <div class="app">
     <Header />
-    <router-view />
-    // <Load />
+		<div class="loader" v-if='is_loading'>Loading...</div>
+    <router-view v-if='!is_loading'/>
   </div>
 </template>
 
@@ -12,6 +12,12 @@ export default {
   name: "App",
   components: {
     Header
+  },
+
+  computed: {
+    is_loading () {
+      return this.$store.state.load_status
+    }
   }
 };
 </script>

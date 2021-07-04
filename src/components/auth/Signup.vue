@@ -32,6 +32,7 @@ export default {
 		return {
 			isRead: {},
 			userID: null,
+			uid: null,
 			feedback: null
 		}
 	},
@@ -44,9 +45,22 @@ export default {
 					.auth()
 					.createUserWithEmailAndPassword(email, password)
 					.then(cred => {
-						db.collection('users').add({
+						this.uid = cred.user.uid
+
+						let registerData = {
 							user_id: this.userID,
-							uid: cred.user.uid,
+							uid: this.uid,
+							checkIn: false,
+							june_quest: false,
+							july_quest: false,
+							september_quest: false,
+						}
+						registerData[this.$store.state.questDate] = true
+						db.collection(this.$store.state.userCollection).add(registerData)
+					})
+					.then(() => {
+						db.collection(this.$store.state.statusCollection).add({
+							uid: this.uid,
 							noticeList: {
 								0: {
 									isDisplay: false,
@@ -65,7 +79,6 @@ export default {
 								}
 							},
 							mysteryCounter: 0,
-							checkIn: false,
 							Network: 0,
 							Security: 0,
 							DataScience: 0,

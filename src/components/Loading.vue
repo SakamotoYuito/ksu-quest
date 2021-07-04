@@ -22,98 +22,55 @@ import db from '@/plugins/firebase'
 import firebase from 'firebase'
 export default {
 	name: 'Loading',
-	data() {
-		return {
-			user: null,
-			docID: null,
-			query: '',
-			urlStatus: [],
-			dbList: [],
-			updateList: [],
-		}
-	},
+	props: ['status', 'place', 'to', 'answer'],
 	created() {
 		this.dbWriting()
 	},
 	methods: {
 		dbWriting() {
-			this.urlStatus.push(this.$route.query.status)
+			let urlStatus = this.status
+			let docID = null
+			let dbList = null
 			const now = new Date()
-			this.user = firebase.auth().currentUser
-			this.uid = this.user.uid
-			if(this.user) {
-				db.collection('access_log').add({
+			let user = firebase.auth().currentUser
+			let uid = user.uid
+			if(user) {
+				db.collection(this.$store.state.accesslogCollection).add({
 					date: now,
-					place: this.$route.query.place,
-					answer: this.$route.query.answer,
-					uid: this.user.uid
+					// TODO: placeをtypeに変更する
+					// 現在は，placeにQuest4などの文字列が入っておりわかりにくいため
+					place: this.place,
+					answer: this.answer,
+					uid: user.uid
 				})
-				db.collection('users')
-					.where('uid', '==', this.uid).get().then(snapshot => {
+				db.collection(this.$store.state.statusCollection)
+					.where('uid', '==', uid).get().then(snapshot => {
 						snapshot.forEach(document => {
-							this.docID = document.id
-							this.dbList = {
-								"Network": document.data().Network,
-								"Security": document.data().Security,
-								"DataScience": document.data().DataScience,
-								"Robot": document.data().Robot,
-								"Infrastructure": document.data().Infrastructure,
-								"IoT": document.data().IoT,
-								"Fabrication": document.data().Fabrication,
-								"Brain": document.data().Brain,
-								"Media": document.data().Media,
-								"SE": document.data().SE,
-								"mysteryCounter": document.data().mysteryCounter
-							}
+							docID = document.id
+							dbList = document.data()
 					})
 				}).then(() => {
-					this.urlStatus[0].forEach(element => {
-						this.updateList[element.split(':')[0]] = element.split(':')[1]
-						let key = element.split(':')[0]
-						this.dbList[key] = Number(this.dbList[key]) + Number(this.updateList[key])
-					})
-					if(this.$route.query.place.includes("Q")) {
-						db.collection('users').doc(this.docID).update({
-							Network: this.dbList['Network'],
-							Security: this.dbList['Security'],
-							DataScience: this.dbList['DataScience'],
-							Robot: this.dbList['Robot'],
-							Infrastructure: this.dbList['Infrastructure'],
-							IoT: this.dbList['IoT'],
-							Fabrication: this.dbList['Fabrication'],
-							Brain: this.dbList['Brain'],
-							Media: this.dbList['Media'],
-							SE: this.dbList['SE'],
-							mysteryCounter: this.dbList['mysteryCounter'] + 1
-						})
-					} else {
-						db.collection('users').doc(this.docID).update({
-							Network: this.dbList['Network'],
-							Security: this.dbList['Security'],
-							DataScience: this.dbList['DataScience'],
-							Robot: this.dbList['Robot'],
-							Infrastructure: this.dbList['Infrastructure'],
-							IoT: this.dbList['IoT'],
-							Fabrication: this.dbList['Fabrication'],
-							Brain: this.dbList['Brain'],
-							Media: this.dbList['Media'],
-							SE: this.dbList['SE'],
-						})
-					}
+					dbList = this.updateDbList(urlStatus, dbList)
+					db.collection(this.$store.state.statusCollection).doc(docID).update(dbList)
 				}).then(() => {
 					setTimeout(() => {
-						if(this.$route.query.to=='Status'){
-							this.$router.push({ path: this.$route.query.to })
-						} else {
-							this.$router.push({ path: 'facility/'+ this.$route.query.to})
-						}
-					}
-					,2000
-					)
+						this.$router.push({ name: 'Status' })
+					} ,2000)
 				})
 			} else {
 				this.$router.push({ name: 'Home' })
 			}
+		},
+		updateDbList(urlStatus, dbList) {
+			urlStatus.forEach(element => {
+				let key = element.split(':')[0]
+				let value = element.split(':')[1]
+				dbList[key] = Number(dbList[key]) + Number(value)
+			})
+			if(this.place.includes("Q")) {
+				dbList['mysteryCounter'] += 1
+			}
+			return dbList
 		}
 	}
 }

@@ -2,6 +2,8 @@ import Vue from 'vue'
 import App from '@/App.vue'
 import '@/plugins/firebase'
 import router from '@/router'
+import store from '@/store'
+import Vuex from 'vuex'
 import VueQrcodeReader from "vue-qrcode-reader"
 import firebase from 'firebase'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -15,12 +17,15 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false
 Vue.use(VueQrcodeReader)
 
+Vue.use(Vuex)
+
 let baseApp
 
 firebase.auth().onAuthStateChanged(() => {
   if(!baseApp) {
     baseApp = new Vue({
       router,
+      store,
       render: h => h(App)
     }).$mount('#app')
   }

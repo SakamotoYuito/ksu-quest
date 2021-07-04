@@ -42,23 +42,31 @@ export default {
 			this.user = firebase.auth().currentUser
 			this.uid = this.user.uid
 			if(this.user) {
-				db.collection('users')
-					.where('uid', '==', this.uid).get().then(snapshot => {
+				db.collection(this.$store.state.statusCollection).where('uid', '==', this.uid).get().then(snapshot => {
+					snapshot.forEach(document => {
+						this.docID = document.id
+						this.noticeList.push(document.data().noticeList)
+					})
+				}).then(() => {
+					this.noticeList[0][0].isDisplay = true
+					db.collection(this.$store.state.statusCollection).doc(this.docID).update({
+						noticeList: this.noticeList[0]
+					})
+				}).then(() => {
+					db.collection(this.$store.state.userCollection).where('uid', '==', this.uid).get().then(snapshot => {
 						snapshot.forEach(document => {
 							this.docID = document.id
-							this.noticeList.push(document.data().noticeList)
 						})
 					}).then(() => {
-						this.noticeList[0][0].isDisplay = true
-						console.log(this.noticeList)
-						db.collection('users').doc(this.docID).update({
+						db.collection(this.$store.state.userCollection).doc(this.docID).update({
 							checkIn: true,
-							noticeList: this.noticeList[0]
 						})
 					})
-				setTimeout(() => {
-					this.$router.push({ name: 'Status' })
-				},3000)
+				}).then(() => {
+					setTimeout(() => {
+						this.$router.push({ name: 'Status' })
+					},3000)
+				})
 			} else {
 				this.$router.push({ name: 'Home' })
 			}

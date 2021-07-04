@@ -1,11 +1,11 @@
 <template>
 	<body>
 		<main>
-			<div v-if="!isShow" class="notification">
+			<div class="notification">
 				<p class="header">通知</p>
 				<ul>
 					<div class="block" v-for="(sentence, index) in sentences" v-bind:key="index">
-						<li v-if="isDisplay[0]">
+						<li v-if="sentences.length!=0">
 								<img src="@/assets/nao@3x.png" class="left">
 						</li>
 						<li>
@@ -14,7 +14,6 @@
 					</div>
 				</ul>
 			</div>
-			<div v-if="isShow" class="loader">Loading...</div>
 		</main>
 		<footer>
 			<div class="container">
@@ -47,12 +46,12 @@ export default {
 			user: null,
 			docID: null,
 			sentences: [],
-			isShow: false,
 			isClick: false,
 			isIcon: false,
 			isDisplay: [],
 			name: [],
-			noticeList: null
+			noticeList: null,
+			sentenceList: [],
 		}
 	},
 	created() {
@@ -75,51 +74,38 @@ export default {
 			this.uid = this.user.uid
 			this.sentences = []
 			if(this.user){
-				db.collection('users')
+				db.collection(this.$store.state.statusCollection)
 					.where('uid', '==', this.uid).get().then(snapshot => {
 						snapshot.forEach(document => {
 							this.docID = document.id
 							this.noticeList = document.data().noticeList
 						})
 				}).then(() => {
-					db.collection('notification').get().then(snapshot => {
+					db.collection(this.$store.state.notificationCollection).get().then(snapshot => {
 							snapshot.forEach(document => {
-								this.name.push(document.data().name)
+								this.sentenceList.push(document.data().sentence)
 							})
-						})
-					for(let i=0; i<Object.keys(this.noticeList).length; i++) {
-						this.isDisplay.push(this.noticeList[i].isDisplay)
-						if(this.isDisplay[i]) {
-							this.noticeList[i].isRead = true
+					}).then(() => {
+						for(let i=0; i<Object.keys(this.noticeList).length; i++) {
+							let isDisplay = this.noticeList[i].isDisplay
+							if (isDisplay){
+								this.noticeList[i].isRead = true
+								this.sentences.push(this.sentenceList[i])
+							}
 						}
-					}				
-					db.collection('users').doc(this.docID).update({
-						noticeList: this.noticeList		
-					})
-					let count = 0
-					if(this.isDisplay[0]) {
-						db.collection('notification').get().then(snapshot => {
-							snapshot.forEach(document => {
-								if(this.isDisplay[count]) {
-									this.sentences.push(document.data().sentence)
-								}
-								count = count + 1
-							})
+						if (this.sentences.length == 0) {
+							this.sentences.push('通知はまだありません')
+						}
+						db.collection(this.$store.state.statusCollection).doc(this.docID).update({
+							noticeList: this.noticeList		
 						})
-					} else {
-						this.sentences.push('通知はまだありません')
-					}
+					})	
 				})
 			}
 		},
 		back() {
 			if(!this.isClick) {
-				setTimeout(() => {
-					this.$router.push({ name: 'Status'})
-						}
-						,1000
-					)
-				this.isShow = true
+				this.$router.push({ name: 'Status'})
 				this.isClick = true
 				this.isIcon = false
 			}

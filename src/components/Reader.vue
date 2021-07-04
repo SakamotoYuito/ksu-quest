@@ -1,13 +1,12 @@
 <template>
 	<body>
 		<main>
-			<div v-if="!isShow" class="title">
+			<div class="title">
 				<p>QRコードリーダー</p>
-				<div v-if="!isShow" class="reader">
+				<div class="reader">
 					<qrcode-stream @init="onInit" @decode="onDecode"></qrcode-stream>
 				</div>
 			</div>
-			<div v-if="isShow" class="loader">Loading...</div>
 		</main>
 		<footer>
 			<div class="container">
@@ -33,7 +32,6 @@ export default {
 	name: 'Reader',
 	data() {
 		return {
-			isShow: false,
 			isClick: false,
 			isIcon: false
 		}
@@ -41,11 +39,9 @@ export default {
 	methods: {
 		onDecode(decodedString) {
 			let str = decodedString.split('//')
-			setTimeout(() => {
-				this.$router.push({ path: str[1] })
-				}
-				,1000
-			)
+			// TODO: QRコード変更前：facility/Question1?status="Brain:1"
+			// 変更後：facility/quest2/Brain
+			this.$router.push({ path: str[1] })
 			this.isShow = true
 		},
 		async onInit (promise) {
@@ -69,12 +65,7 @@ export default {
 		},
 		back() {
 			if(!this.isClick) {
-				setTimeout(() => {
-					this.$router.push({ name: 'Status'})
-						}
-						,1000
-					)
-				this.isShow = true
+				this.$router.push({ name: 'Status'})
 				this.isClick = true
 				this.isIcon = false
 			}

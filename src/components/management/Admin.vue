@@ -95,7 +95,8 @@ export default {
 			docIdList: [],
 			noticeList: [],
 			checkInList: [],
-			number: null
+			number: null,
+			userCollectionData: {},
 		}
 	},
   beforeDestroy () {
@@ -123,36 +124,48 @@ export default {
 		makeList() {
 			this.dataList = []
 			this.uidList = []
+			this.userCollectionData = {}
 			this.joinNumber = 0
 			this.required = 0
 			this.searchItem = null
-			db.collection('users').get().then(snapshot => {
+			db.collection(this.$store.state.userCollection).get().then(snapshot => {
 				snapshot.forEach(document => {
-
-					if(document.data().checkIn){
-						if(this.selected == 1) {
-							if(document.data().mysteryCounter >= 2) {
-								this.pushDataList(document)
-								this.required += 1
-							}
-						} else if(this.selected == 2) {
-							if(document.data().mysteryCounter >= 3) {
-								this.pushDataList(document)
-								this.required += 1
-							}
-						} else if(this.selected == 0) {
-							this.pushDataList(document)
-							if(document.data().checkIn) {
-								this.required += 1
-							}
-						} else if(this.selected == 3) {
-							if(document.data().mysteryCounter >= 5) {
-								this.pushDataList(document)
-								this.required += 1
-							}
-						}
-						this.joinNumber += 1
+					this.userCollectionData[document.data().uid] = {
+						'checkIn': document.data().checkIn,
+						'user_id': document.data().user_id
 					}
+				})
+			}).then(() => {
+				db.collection(this.$store.state.statusCollection).get().then(snapshot => {
+					snapshot.forEach(document => {
+						let userData = this.userCollectionData[document.data().uid]
+						let checkIn = userData.checkIn
+
+						if(checkIn){
+							if(this.selected == 1) {
+								if(document.data().mysteryCounter >= 2) {
+									this.pushDataList(document, userData)
+									this.required += 1
+								}
+							} else if(this.selected == 2) {
+								if(document.data().mysteryCounter >= 3) {
+									this.pushDataList(document, userData)
+									this.required += 1
+								}
+							} else if(this.selected == 0) {
+								this.pushDataList(document, userData)
+								if(checkIn) {
+									this.required += 1
+								}
+							} else if(this.selected == 3) {
+								if(document.data().mysteryCounter >= 5) {
+									this.pushDataList(document, userData)
+									this.required += 1
+								}
+							}
+							this.joinNumber += 1
+						}
+					})
 				})
 			})
 		},
@@ -160,37 +173,32 @@ export default {
 			this.docIdList = []
 			this.noticeList = []
 			this.checkInList = []
-			db.collection('users').get().then(snapshot => {
-				snapshot.forEach(document => {
-					for(let i=0; i<this.dataList.length; i++) {
-						let data = this.dataList[i]
-						if(document.data().user_id == data.userID && data.checked && data.checkIn) {
-							this.docIdList.push(document.id)
-							this.noticeList.push(document.data().noticeList)
-							this.checkInList.push(document.data().checkIn)
-						}
-					}
-				})
-			}).then(() => {
-				let updateFlag = false
-				for(let i=0; i<this.noticeList.length; i++) {
-					if(this.checkInList[i] == true) {
-						this.noticeList[i][this.number-1].isDisplay = true
-						updateFlag = true
-					}
+			for(let i=0; i<this.dataList.length; i++) {
+				let data = this.dataList[i]
+				if(data.checked && data.checkIn) {
+					this.docIdList.push(data.id)
+					this.noticeList.push(data.noticeList)
+					this.checkInList.push(data.checkIn)
 				}
-				if(updateFlag) {
-					for(let i=0; i<this.docIdList.length; i++) {
-						db.collection('users').doc(this.docIdList[i]).update({
-							noticeList: this.noticeList[i]
-						})
-					}
+			}
+			let updateFlag = false
+			for(let i=0; i<this.noticeList.length; i++) {
+				if(this.checkInList[i] == true) {
+					this.noticeList[i][this.number-1].isDisplay = true
+					updateFlag = true
 				}
-				setTimeout(this.makeList, 2000)
-			})
+			}
+			if(updateFlag) {
+				for(let i=0; i<this.docIdList.length; i++) {
+					db.collection(this.$store.state.statusCollection).doc(this.docIdList[i]).update({
+						noticeList: this.noticeList[i]
+					})
+				}
+			}
+			setTimeout(this.makeList, 2000)
 			console.log("通知しました．")
 		},
-		pushDataList(document) {
+		pushDataList(document, userData) {
 			let point = 
 				document.data().Brain + document.data().DataScience +
 				document.data().Fabrication + document.data().Infrastructure +
@@ -199,8 +207,8 @@ export default {
 				document.data().SE + document.data().Security
 			this.dataList.push({
 				checked: this.checked,
-				userID: document.data().user_id,
-				checkIn: document.data().checkIn,
+				userID: userData.user_id,
+				checkIn: userData.checkIn,
 				mystery: document.data().mysteryCounter,
 				point: point,
 				notice1: document.data().noticeList[0].isDisplay,
@@ -209,6 +217,8 @@ export default {
 				isRead1: document.data().noticeList[0].isRead,
 				isRead2: document.data().noticeList[1].isRead,
 				isRead3: document.data().noticeList[2].isRead,
+				noticeList: document.data().noticeList,
+				id: document.id
 			})
 		},
 		login() {

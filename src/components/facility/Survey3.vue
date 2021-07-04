@@ -1,7 +1,7 @@
 <template>
 	<body>
 		<main>
-			<div v-if="!isShow">
+			<div>
 				<div class="notification">
 					<p>アンケート</p>
 				</div>
@@ -107,7 +107,6 @@ export default {
 			param: [false, false, false, false, false, false, false, false, false, false],
 			notCheck: [],
 			feedback: null,
-			isShow: false,
 			isClick: false,
 			isIcon: false,
 			labStatus: {
@@ -160,12 +159,7 @@ export default {
 		},
 		back() {
 			if(!this.isClick) {
-				setTimeout(() => {
-					this.$router.push({ name: 'Status'})
-						}
-						,1000
-					)
-				this.isShow = true
+				this.$router.push({ name: 'Status'})
 				this.isClick = true
 				this.isIcon = false
 			}

@@ -34,55 +34,54 @@
 				<div v-if="isCorrect && courseName=='Network'">
 					<p>スキル <a>ネットワークシステム</a><br/>を手に入れた！</p>
 					<p>解説を読んだら、下の 戻るボタン を押してステータスを確認しよう。</p>
-					<img src="@/assets/courseIcon/Network.png" class="courseImg center">
+					<img src="@/assets/courseIcon/June/Network.png" class="courseImg center">
 				</div>
 				<div v-if="isCorrect && courseName=='Security'">
 					<p>スキル <a>情報セキュリティ</a><br/>を手に入れた！</p>
 					<p>解説を読んだら、下の 戻るボタン を押してステータスを確認しよう。</p>
-					<img src="@/assets/courseIcon/Security.png" class="courseImg center">
+					<img src="@/assets/courseIcon/June/Security.png" class="courseImg center">
 				</div>
 				<div v-if="isCorrect && courseName=='DataScience'">
 					<p>スキル <a>データサイエンス</a><br/>を手に入れた！</p>
 					<p>解説を読んだら、下の 戻るボタン を押してステータスを確認しよう。</p>
-					<img src="@/assets/courseIcon/DataScience.png" class="courseImg center">
+					<img src="@/assets/courseIcon/June/DataScience.png" class="courseImg center">
 				</div>
 				<div v-if="isCorrect && courseName=='Robot'">
 					<p>スキル <a>ロボットインタラクション</a><br/>を手に入れた！</p>
 					<p>解説を読んだら、下の 戻るボタン を押してステータスを確認しよう。</p>
-					<img src="@/assets/courseIcon/Robot.png" class="courseImg center">
+					<img src="@/assets/courseIcon/June/Robot.png" class="courseImg center">
 				</div>
 				<div v-if="isCorrect && courseName=='Infrastructure'">
 					<p>スキル <a>コンピュータ基盤設計</a><br/>を手に入れた！</p>
 					<p>解説を読んだら、下の 戻るボタン を押してステータスを確認しよう。</p>
-					<img src="@/assets/courseIcon/Infrastructure.png" class="courseImg center">
+					<img src="@/assets/courseIcon/June/Infrastructure.png" class="courseImg center">
 				</div>
 				<div v-if="isCorrect && courseName=='IoT'">
 					<p>スキル <a>組込みシステム</a><br/>を手に入れた！</p>
 					<p>解説を読んだら、下の 戻るボタン を押してステータスを確認しよう。</p>
-					<img src="@/assets/courseIcon/IoT.png" class="courseImg center">
+					<img src="@/assets/courseIcon/June/IoT.png" class="courseImg center">
 				</div>
 				<div v-if="isCorrect && courseName=='Fabrication'">
 					<p>スキル <a>デジタルファブリケーション</a><br/>を手に入れた！</p>
 					<p>解説を読んだら、下の 戻るボタン を押してステータスを確認しよう。</p>
-					<img src="@/assets/courseIcon/Fabrication.png" class="courseImg center">
+					<img src="@/assets/courseIcon/June/Fabrication.png" class="courseImg center">
 				</div>
 				<div v-if="isCorrect && courseName=='Brain'">
 					<p>スキル <a>脳科学</a><br/>を手に入れた！</p>
 					<p>解説を読んだら、下の 戻るボタン を押してステータスを確認しよう。</p>
-					<img src="@/assets/courseIcon/Brain.png" class="courseImg center">
+					<img src="@/assets/courseIcon/June/Brain.png" class="courseImg center">
 				</div>
 				<div v-if="isCorrect && courseName=='Media'">
 					<p>スキル <a>メディア処理技術</a><br/>を手に入れた！</p>
 					<p>解説を読んだら、下の 戻るボタン を押してステータスを確認しよう。</p>
-					<img src="@/assets/courseIcon/Media.png" class="courseImg center">
+					<img src="@/assets/courseIcon/June/Media.png" class="courseImg center">
 				</div>
 				<div v-if="isCorrect && courseName=='SE'">
 					<p>スキル <a>情報システム</a><br/>を手に入れた！</p>
 					<p>解説を読んだら、下の 戻るボタン を押してステータスを確認しよう。</p>
-					<img src="@/assets/courseIcon/SE.png" class="courseImg center">
+					<img src="@/assets/courseIcon/June/SE.png" class="courseImg center">
 				</div>
 			</div>
-			<div v-if="isShow && !isCorrect" class="loader">Loading...</div>
 		</main>
 		<footer>
 			<div class="container">
@@ -146,14 +145,10 @@ export default {
 		back() {
 			if(!this.isClick) {
 				if(this.isCorrect) {
-				this.$router.push({ name: 'Loading', query: {status: this.course, place: 'Quest4', to: 'Status', answer: this.answer}})
-				this.isShow = true
+					this.$router.push({ name: 'Loading', params: {status: this.course, place: 'Quest4', to: 'Status', answer: this.answer}})
+					this.isShow = true
 				} else {
-					setTimeout(() => {
-						this.$router.push({ name: 'Status'})
-							}
-							,1000
-						)
+					this.$router.push({ name: 'Status'})
 					this.isShow = true
 					this.isClick = true
 					this.isIcon = false

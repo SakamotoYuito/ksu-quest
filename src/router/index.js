@@ -11,10 +11,12 @@ import Admin from '@/components/management/Admin'
 import CheckIn from '@/components/management/CheckIn'
 import CheckOut from '@/components/management/CheckOut'
 import MediaStudio from '@/components/facility/MediaStudio'
+import NetworkJune from '@/components/facility/June/NetworkJune'
 import Question1 from '@/components/facility/Question1'
 import Survey1 from '@/components/facility/Survey1'
 import Survey2 from '@/components/facility/Survey2'
 import Survey3 from '@/components/facility/Survey3'
+import store from '@/store'
 
 Vue.use(VueRouter)
 
@@ -52,6 +54,7 @@ const routes = [
   {
     path: '/Loading',
     name: 'Loading',
+    props: true,
     component: Loading
   },
   {
@@ -73,6 +76,11 @@ const routes = [
     path: '/facility/MediaStudio',
     name: 'MediaStudio',
     component: MediaStudio
+  },
+  {
+    path: '/facility/June/NetworkJune',
+    name: 'NetworkJune',
+    component: NetworkJune
   },
   {
     path: '/facility/Question1',
@@ -100,6 +108,18 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  store.commit('SET_LOAD_STATUS', true)
+
+  next()
+})
+
+router.afterEach(() => {
+  setTimeout(() => {
+    store.commit('SET_LOAD_STATUS')
+  }, 1000)
 })
 
 export default router

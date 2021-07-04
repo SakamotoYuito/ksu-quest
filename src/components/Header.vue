@@ -16,10 +16,10 @@
 
 <script>
 import firebase from 'firebase'
+
 export default {
   data () {
     return {
-      isClick: false,
       isHome: true
     }
   },
@@ -33,19 +33,12 @@ export default {
   },
 	methods: {
 		logout() {
-      this.isClick = true
-			if(!this.isClick) {
-				setTimeout(() => {
-					firebase.auth().signOut().catch((error) => {
-						if (error.name === 'NavigationDuplicated') {
-							return
-						}
-					})
-					}
-					,1000
-					)
-          this.isClick = false
+			if (this.$store.state.unsubscribeSnapshot != null){
+				this.$store.state.unsubscribeSnapshot()
 			}
+			firebase.auth().signOut().then(() => {
+				this.$store.state.unsubscribeSnapshot = null
+			})
 		},
 	}
 }

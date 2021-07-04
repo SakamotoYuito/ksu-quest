@@ -1,6 +1,5 @@
 <template>
 	<body>
-
 		<main>
 			<div class="CheckOut">
 				<p>チェックアウトが<br/>完了しました！</p>
@@ -43,13 +42,13 @@ export default {
 			this.uid = this.user.uid
 			if(this.user) {
 				setTimeout(() => {
-					db.collection('users')
+					db.collection(this.$store.state.userCollection)
 						.where('uid', '==', this.uid).get().then(snapshot => {
 							snapshot.forEach(document => {
 								this.docID = document.id
 							})
 						}).then(() => {
-							db.collection('users').doc(this.docID).update({
+							db.collection(this.$store.state.userCollection).doc(this.docID).update({
 								checkIn: false
 							})
 						})

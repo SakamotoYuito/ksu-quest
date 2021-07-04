@@ -24,7 +24,7 @@ export default {
 		firebase.auth().onAuthStateChanged(user => {
 			if(user){
 				this.user = user
-				db.collection('users')
+				db.collection(this.$store.state.statusCollection)
 					.where('uid', '==', user.uid).get().then(snapshot => {
 						snapshot.forEach(document => {
 							this.dataList = [
