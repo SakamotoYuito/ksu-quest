@@ -41,7 +41,7 @@ export default {
 					// 現在は，placeにQuest4などの文字列が入っておりわかりにくいため
 					place: this.place,
 					answer: this.answer,
-					uid: user.uid
+					uid: uid
 				})
 				db.collection(this.$store.state.statusCollection)
 					.where('uid', '==', uid).get().then(snapshot => {

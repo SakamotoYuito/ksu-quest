@@ -63,6 +63,7 @@ export default {
 						})
 					})
 				}).then(() => {
+					this.writeLog()
 					setTimeout(() => {
 						this.$router.push({ name: 'Status' })
 					},3000)
@@ -70,6 +71,17 @@ export default {
 			} else {
 				this.$router.push({ name: 'Home' })
 			}
+		},
+		writeLog() {
+			const now = new Date()
+			let user = firebase.auth().currentUser
+			let uid = user.uid
+			db.collection(this.$store.state.accesslogCollection).add({
+				date: now,
+				place: 'checkin',
+				answer: 'checkin',
+				uid: uid
+			})
 		}
 	}
 }

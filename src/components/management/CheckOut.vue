@@ -52,11 +52,23 @@ export default {
 								checkIn: false
 							})
 						})
-					this.$router.push({ name: 'Home' })
+					firebase.auth().signOut()
 				},3000)
+				this.writeLog()
 			} else {
 				this.$router.push({ name: 'Home' })
 			}
+		},
+		writeLog() {
+			const now = new Date()
+			let user = firebase.auth().currentUser
+			let uid = user.uid
+			db.collection(this.$store.state.accesslogCollection).add({
+				date: now,
+				place: 'checkout',
+				answer: 'checkout',
+				uid: uid
+			})
 		}
 	}
 }
