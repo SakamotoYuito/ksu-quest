@@ -119,7 +119,8 @@ export default {
 			isCamera: false,
 			isBell: false,
 			isNotification: false,
-			isRead: false
+			isRead: false,
+			unsubscribe: null
 		}
 	},
 	mounted() {
@@ -164,17 +165,23 @@ export default {
 			console.log(this.isNotification)
 		}
 	},
+	beforeDestroy(){
+		if (this.unsubscribe != null) {
+			this.unsubscribe()
+			store.commit('SET_UNSUBSCRIBE', null)
+		}
+	},
 	methods: {
 		listen(uid) {
-			//if (this.$store.state.unsubscribeSnapshot == null){
-				let unsubscribe = db.collection(this.$store.state.statusCollection).where("uid", "==", uid).onSnapshot(querySnapshot => {
+			if (this.$store.state.unsubscribeSnapshot == null){
+				this.unsubscribe = db.collection(this.$store.state.statusCollection).where("uid", "==", uid).onSnapshot(querySnapshot => {
 					querySnapshot.forEach(doc => {
 						this.noticeList = doc.data().noticeList
 					})
 					this.checkNotification()
 				})
-				store.commit('SET_UNSUBSCRIBE', unsubscribe)
-			// }
+				store.commit('SET_UNSUBSCRIBE', this.unsubscribe)
+			}
 		},
 		RadarChart() {
 			this.datacollection = {

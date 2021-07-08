@@ -72,7 +72,7 @@ export default {
 		back() {
 			if(!this.isClick) {
 				if(this.isCorrect) {
-					this.$router.push({ name: 'Loading', params: {status: this.rewards, place: 'Quest4', answer: this.answer}})
+					this.$router.push({ name: 'Loading', params: {status: this.rewards, place: this.courseId, answer: this.answer}})
 				} else {
 					this.$router.push({ name: 'Status'})
 					this.isClick = true

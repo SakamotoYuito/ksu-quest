@@ -29,8 +29,20 @@
 						<span class="lever"></span>
 						On
 					</label>
+					<label>
+						Deny
+						<input type="checkbox" v-model="allowCheckOut">
+						<span class="lever"></span>
+						allow checkout
+					</label>
 				</div>
 			</div>
+
+			<div class="input-field" v-if="!isShow">
+        <input placeholder="User ID" id="search_term" type="text" class="validate" v-model="searchTerm">
+        <label for="search_term">Search</label>
+      </div>
+
 			<div v-if="!isShow" class="scroll">
 				<table>
 					<thead>
@@ -43,7 +55,7 @@
 						<th>isRead</th>
 					</thead>
 					<tbody>
-						<tr v-for="item in dataList" :key="item.userID">
+						<tr v-for="item in slicedDataList" :key="item.id">
 							<td>
 								<label>
 									<input type="checkbox" class="filled-in" v-model="item.checked" />
@@ -67,6 +79,7 @@
 					<option value="3">3</option>
 				</select>
 				<button type="button" class="btn btn-default" @click="pushNotification">{{ number }}</button>
+				<button type="button" class="btn btn-default" @click="userInitialize">初期化</button>
 			</div>
 		</main>
 	</body>
@@ -97,6 +110,8 @@ export default {
 			checkInList: [],
 			number: null,
 			userCollectionData: {},
+			allowCheckOut: false,
+			searchTerm: ''
 		}
 	},
   beforeDestroy () {
@@ -111,13 +126,27 @@ export default {
 		roop: function() {
 			if(!this.roop) {
 				clearInterval(this.intervalId)
-				console.log(this.roop)
-				console.log("expected false")
 			} else {
 				this.intervalId = setInterval(() => {
 					this.makeList()
 				}, 20000)
 			}
+		}
+	},
+	computed: {
+		slicedDataList() {
+			if(this.searchTerm == ''){
+				return this.dataList
+			}
+
+			let filterResult = this.dataList.filter(data => {
+				return data.user_id.includes(this.searchTerm)
+			})
+
+			console.log(filterResult)
+
+			return filterResult.slice(0, filterResult.length)
+
 		}
 	},
 	methods: {
@@ -132,7 +161,8 @@ export default {
 				snapshot.forEach(document => {
 					this.userCollectionData[document.data().uid] = {
 						'checkIn': document.data().checkIn,
-						'user_id': document.data().user_id
+						'user_id': document.data().user_id,
+						'quest_date': document.data()[this.$store.state.questDate]
 					}
 				})
 			}).then(() => {
@@ -140,8 +170,9 @@ export default {
 					snapshot.forEach(document => {
 						let userData = this.userCollectionData[document.data().uid]
 						let checkIn = userData.checkIn
+						let quest_date = userData.quest_date
 
-						if(checkIn){
+						if( (checkIn || this.allowCheckOut) && quest_date){
 							if(this.selected == 1) {
 								if(document.data().mysteryCounter >= 2) {
 									this.pushDataList(document, userData)
@@ -154,9 +185,7 @@ export default {
 								}
 							} else if(this.selected == 0) {
 								this.pushDataList(document, userData)
-								if(checkIn) {
-									this.required += 1
-								}
+								this.required += 1
 							} else if(this.selected == 3) {
 								if(document.data().mysteryCounter >= 5) {
 									this.pushDataList(document, userData)
@@ -170,28 +199,24 @@ export default {
 			})
 		},
 		pushNotification() {
-			this.docIdList = []
-			this.noticeList = []
-			this.checkInList = []
+			let docIdList = []
+			let noticeList = []
 			for(let i=0; i<this.dataList.length; i++) {
 				let data = this.dataList[i]
-				if(data.checked && data.checkIn) {
-					this.docIdList.push(data.id)
-					this.noticeList.push(data.noticeList)
-					this.checkInList.push(data.checkIn)
+				if(data.checked) {
+					docIdList.push(data.id)
+					noticeList.push(data.noticeList)
 				}
 			}
 			let updateFlag = false
-			for(let i=0; i<this.noticeList.length; i++) {
-				if(this.checkInList[i] == true) {
-					this.noticeList[i][this.number-1].isDisplay = true
-					updateFlag = true
-				}
+			for(let i=0; i<noticeList.length; i++) {
+				noticeList[i][this.number-1].isDisplay = true
+				updateFlag = true
 			}
 			if(updateFlag) {
-				for(let i=0; i<this.docIdList.length; i++) {
-					db.collection(this.$store.state.statusCollection).doc(this.docIdList[i]).update({
-						noticeList: this.noticeList[i]
+				for(let i=0; i<docIdList.length; i++) {
+					db.collection(this.$store.state.statusCollection).doc(docIdList[i]).update({
+						noticeList: noticeList[i]
 					})
 				}
 			}
@@ -251,6 +276,54 @@ export default {
 					,1000
 					)
 				this.isShow = true
+			}
+		},
+		userInitialize() {
+			for(let i=0; i<this.dataList.length; i++) {
+				let data = this.dataList[i]
+				if(data.checked) {
+					db.collection(this.$store.state.statusCollection).doc(data.id).update(this.getInitDataList())
+					db.collection(this.$store.state.userCollection).where('user_id', '==', data.userID).get().then(snapshot => {
+						snapshot.forEach(document => {
+							db.collection(this.$store.state.userCollection).doc(document.id).update({
+								checkIn: false
+							})
+						})
+					})
+
+				}
+			}
+		},
+		getInitDataList() {
+			return {
+				noticeList: {
+					0: {
+						isDisplay: false,
+						isRead: false,
+						name: "message1"
+					},
+					1: {
+						isDisplay: false,
+						isRead: false,
+						name: "message2"
+					},
+					2: {
+						isDisplay: false,
+						isRead: false,
+						name: "message3"
+					}
+				},
+				mysteryCounter: 0,
+				Network: 0,
+				Security: 0,
+				DataScience: 0,
+				Robot: 0,
+				Infrastructure: 0,
+				IoT: 0,
+				Fabrication: 0,
+				Brain: 0,
+				Media: 0,
+				SE: 0
 			}
 		}
 	}

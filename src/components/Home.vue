@@ -14,9 +14,9 @@
 			</form>	
 			<a><router-link to="/Signup">初めてご利用の方はこちら</router-link></a>
 		</div>
-	<button class="btn waves-effect waves-light" @click="maintenance">
+	<!-- <button class="btn waves-effect waves-light" @click="maintenance">
 	test
-	</button>
+	</button> -->
 	</div>
 </template>
 

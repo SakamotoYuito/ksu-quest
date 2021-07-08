@@ -42,17 +42,16 @@ export default {
 			this.uid = this.user.uid
 			if(this.user) {
 				setTimeout(() => {
-					db.collection(this.$store.state.userCollection)
-						.where('uid', '==', this.uid).get().then(snapshot => {
-							snapshot.forEach(document => {
-								this.docID = document.id
-							})
-						}).then(() => {
-							db.collection(this.$store.state.userCollection).doc(this.docID).update({
-								checkIn: false
-							})
+					db.collection(this.$store.state.userCollection).where('uid', '==', this.uid).get().then(snapshot => {
+						snapshot.forEach(document => {
+							this.docID = document.id
 						})
-					firebase.auth().signOut()
+					}).then(() => {
+						db.collection(this.$store.state.userCollection).doc(this.docID).update({
+							checkIn: false
+						})
+						firebase.auth().signOut()
+					})
 				},3000)
 				this.writeLog()
 			} else {

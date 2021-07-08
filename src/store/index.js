@@ -3,15 +3,18 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+let month = 'june'
+
 export default new Vuex.Store({
+
   state: {
     load_status: false,
     unsubscribeSnapshot: null,
     userCollection: 'users',
-    accesslogCollection: 'july_access_log',
+    accesslogCollection: month + '_access_log',
     notificationCollection: 'notification',
-		statusCollection: 'july_status',
-		questDate: 'july_quest'
+		statusCollection: month + '_status',
+		questDate: month + '_quest'
   },
   mutations: {
     SET_LOAD_STATUS(state, loadStatus) {

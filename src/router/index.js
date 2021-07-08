@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '@/components/Home'
 import Signup from '@/components/auth/Signup'
 import Status from '@/components/Status'
+import PostQuest from '@/components/PostQuest'
 import Notification from '@/components/Notification'
 import AdventureLog from '@/components/AdventureLog'
 import Reader from '@/components/Reader'
@@ -31,6 +32,11 @@ const routes = [
 	name: 'Signup',
 	component: Signup
   },
+  {
+    path: '/PostQuest',
+    name: 'PostQuest',
+    component: PostQuest
+    },
   {
     path: '/Status',
     name: 'Status',
