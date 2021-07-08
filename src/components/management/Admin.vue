@@ -110,7 +110,7 @@ export default {
 			checkInList: [],
 			number: null,
 			userCollectionData: {},
-			allowCheckOut: false,
+			allowCheckOut: true,
 			searchTerm: ''
 		}
 	},
@@ -140,11 +140,9 @@ export default {
 			}
 
 			let filterResult = this.dataList.filter(data => {
-				return data.user_id.includes(this.searchTerm)
+				return data.userID.includes(this.searchTerm)
 			})
-
-			console.log(filterResult)
-
+			
 			return filterResult.slice(0, filterResult.length)
 
 		}
