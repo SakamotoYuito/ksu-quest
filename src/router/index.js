@@ -11,7 +11,6 @@ import Loading from '@/components/Loading'
 import Admin from '@/components/management/Admin'
 import CheckIn from '@/components/management/CheckIn'
 import CheckOut from '@/components/management/CheckOut'
-// import MediaStudio from '@/components/facility/MediaStudio'
 import JulyNetwork from '@/components/facility/July/JulyNetwork'
 import JulySecurity from '@/components/facility/July/JulySecurity'
 import JulyDataScience from '@/components/facility/July/JulyDataScience'
@@ -22,7 +21,7 @@ import JulyFabrication from '@/components/facility/July/JulyFabrication'
 import JulyBrain from '@/components/facility/July/JulyBrain'
 import JulyMedia from '@/components/facility/July/JulyMedia'
 import JulySE from '@/components/facility/July/JulySE'
-// import Question1 from '@/components/facility/Question1'
+import EmergencyQuest from '@/components/facility/EmergencyQuest'
 import Survey1 from '@/components/facility/Survey1'
 import Survey2 from '@/components/facility/Survey2'
 import Survey3 from '@/components/facility/Survey3'
@@ -87,11 +86,6 @@ const routes = [
     name: 'CheckOut',
     component: CheckOut
   },
-  // {
-  //   path: '/facility/MediaStudio',
-  //   name: 'MediaStudio',
-  //   component: MediaStudio
-  // },
   {
     path: '/facility/July/JulyNetwork',
     name: 'JulyNetwork',
@@ -142,11 +136,11 @@ const routes = [
     name: 'JulySE',
     component: JulySE
   },
-  // {
-  //   path: '/facility/Question1',
-  //   name: 'Question1',
-  //   component: Question1
-  // },
+  {
+    path: '/facility/EmergencyQuest',
+    name: 'EmergencyQuest',
+    component: EmergencyQuest
+  },
   {
     path: '/facility/Survey1',
     name: 'Survey1',

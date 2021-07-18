@@ -140,17 +140,20 @@ export default {
           },
           gridLines: {
             display: true,
-            color: "white",
+            color: "rgba(255, 255, 255, 0.7)",
           },
           ticks: {
-            display: false,
+            display: true,
+            fontFamily: "PixelMplus12-Bold",
+            backdropColor: "rgba(255, 255, 255, 0)",
+            fontColor: "rgba(255, 255, 255)",
             min: -1,
             max: 5,
             stepSize: 1,
           },
           angleLines: {
             display: true,
-            color: "white",
+            color: "rgba(255, 255, 255, 0.3)",
           },
         },
         title: {
@@ -212,11 +215,6 @@ export default {
       }
     });
   },
-  // watch: {
-  //   isNotification: function () {
-  //     console.log(this.isNotification);
-  //   },
-  // },
   beforeDestroy() {
     if (this.unsubscribe != null) {
       this.unsubscribe();
@@ -274,6 +272,22 @@ export default {
           },
         ],
       };
+      let minData = Math.min.apply(
+        null,
+        this.datacollection["datasets"][0]["data"]
+      );
+      let maxData = Math.max.apply(
+        null,
+        this.datacollection["datasets"][0]["data"]
+      );
+      let ticks = this.options["scale"]["ticks"];
+      if (minData > 7 || maxData > 10) {
+        ticks["max"] = 15;
+        ticks["stepSize"] = 3;
+      } else if (minData > 3 || maxData > 6) {
+        ticks["max"] = 10;
+        ticks["stepSize"] = 2;
+      }
     },
     reader() {
       if (!this.isClick) {
