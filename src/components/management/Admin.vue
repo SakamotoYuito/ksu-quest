@@ -288,9 +288,10 @@ export default {
 							})
 						})
 					})
-
 				}
 			}
+			setTimeout(this.makeList, 2000)
+			console.log('初期化しました')
 		},
 		getInitDataList() {
 			return {

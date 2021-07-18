@@ -11,9 +11,18 @@ import Loading from '@/components/Loading'
 import Admin from '@/components/management/Admin'
 import CheckIn from '@/components/management/CheckIn'
 import CheckOut from '@/components/management/CheckOut'
-import MediaStudio from '@/components/facility/MediaStudio'
-import NetworkJune from '@/components/facility/June/NetworkJune'
-import Question1 from '@/components/facility/Question1'
+// import MediaStudio from '@/components/facility/MediaStudio'
+import JulyNetwork from '@/components/facility/July/JulyNetwork'
+import JulySecurity from '@/components/facility/July/JulySecurity'
+import JulyDataScience from '@/components/facility/July/JulyDataScience'
+import JulyRobot from '@/components/facility/July/JulyRobot'
+import JulyInfrastructure from '@/components/facility/July/JulyInfrastructure'
+import JulyIoT from '@/components/facility/July/JulyIoT'
+import JulyFabrication from '@/components/facility/July/JulyFabrication'
+import JulyBrain from '@/components/facility/July/JulyBrain'
+import JulyMedia from '@/components/facility/July/JulyMedia'
+import JulySE from '@/components/facility/July/JulySE'
+// import Question1 from '@/components/facility/Question1'
 import Survey1 from '@/components/facility/Survey1'
 import Survey2 from '@/components/facility/Survey2'
 import Survey3 from '@/components/facility/Survey3'
@@ -28,15 +37,15 @@ const routes = [
     component: Home
   },
   {
-	path: '/Signup',
-	name: 'Signup',
-	component: Signup
+    path: '/Signup',
+    name: 'Signup',
+    component: Signup
   },
   {
     path: '/PostQuest',
     name: 'PostQuest',
     component: PostQuest
-    },
+  },
   {
     path: '/Status',
     name: 'Status',
@@ -78,21 +87,66 @@ const routes = [
     name: 'CheckOut',
     component: CheckOut
   },
+  // {
+  //   path: '/facility/MediaStudio',
+  //   name: 'MediaStudio',
+  //   component: MediaStudio
+  // },
   {
-    path: '/facility/MediaStudio',
-    name: 'MediaStudio',
-    component: MediaStudio
+    path: '/facility/July/JulyNetwork',
+    name: 'JulyNetwork',
+    component: JulyNetwork
   },
   {
-    path: '/facility/June/NetworkJune',
-    name: 'NetworkJune',
-    component: NetworkJune
+    path: '/facility/July/JulySecurity',
+    name: 'JulySecurity',
+    component: JulySecurity
   },
   {
-    path: '/facility/Question1',
-    name: 'Question1',
-    component: Question1
+    path: '/facility/July/JulyDataScience',
+    name: 'JulyDataScience',
+    component: JulyDataScience
   },
+  {
+    path: '/facility/July/JulyRobot',
+    name: 'JulyRobot',
+    component: JulyRobot
+  },
+  {
+    path: '/facility/July/JulyInfrastructure',
+    name: 'JulyInfrastructure',
+    component: JulyInfrastructure
+  },
+  {
+    path: '/facility/July/JulyIoT',
+    name: 'JulyIoT',
+    component: JulyIoT
+  },
+  {
+    path: '/facility/July/JulyFabrication',
+    name: 'JulyFabrication',
+    component: JulyFabrication
+  },
+  {
+    path: '/facility/July/JulyBrain',
+    name: 'JulyBrain',
+    component: JulyBrain
+  },
+  {
+    path: '/facility/July/JulyMedia',
+    name: 'JulyMedia',
+    component: JulyMedia
+  },
+  {
+    path: '/facility/July/JulySE',
+    name: 'JulySE',
+    component: JulySE
+  },
+  // {
+  //   path: '/facility/Question1',
+  //   name: 'Question1',
+  //   component: Question1
+  // },
   {
     path: '/facility/Survey1',
     name: 'Survey1',

@@ -3,8 +3,11 @@
     <main>
       <div>
         <ul>
-          <li v-for="(value, key, index) in questCondition['condition']" :key="key">
-            <a>key: {{key}} value: {{value}} index: {{index}}</a>
+          <li
+            v-for="(value, key, index) in questCondition['condition']"
+            :key="key"
+          >
+            <a>key: {{ key }} value: {{ value }} index: {{ index }}</a>
           </li>
         </ul>
       </div>
@@ -13,18 +16,18 @@
 </template>
 
 <script>
-import db from '@/plugins/firebase'
+import db from "@/plugins/firebase";
 export default {
-  name: 'PostQuest',
+  name: "PostQuest",
   data() {
     return {
       user: null,
       questCondition: null,
       questId: null,
-    }
+    };
   },
   mounted() {
-    this.getQuestInfo()
+    this.getQuestInfo();
     // this.postQuest('Network')
     // setTimeout(() => {
     //   this.pushReceivingQuest()
@@ -32,28 +35,28 @@ export default {
   },
   methods: {
     pushReceivingQuest() {
-      console.log(this.questCondition)
-      db.collection('congestion').doc('questList').update(this.questCondition)  
+      console.log(this.questCondition);
+      db.collection("congestion").doc("questList").update(this.questCondition);
     },
     getQuestInfo() {
-      db.collection('congestion').get().then(snapshot => {
-        snapshot.forEach(document => {
-          this.questCondition = document.data()
-        })
-      })
+      db.collection("congestion")
+        .get()
+        .then((snapshot) => {
+          snapshot.forEach((document) => {
+            this.questCondition = document.data();
+          });
+        });
     },
     postQuest(questName) {
-      this.questId = questName
-      this.getQuestInfo()
+      this.questId = questName;
+      this.getQuestInfo();
       setTimeout(() => {
-        this.questCondition['condition'][this.questId]['congestion'] += 1
-      }, 1000)
-
-    }
-  }
-}
+        this.questCondition["condition"][this.questId]["congestion"] += 1;
+      }, 1000);
+    },
+  },
+};
 </script>
 
 <style>
-
 </style>
