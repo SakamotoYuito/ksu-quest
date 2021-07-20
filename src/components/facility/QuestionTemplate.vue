@@ -1,5 +1,5 @@
 <template>
-  <body>
+  <body v-if="isShow">
     <main>
       <div v-if="!isCorrect">
         <div class="notification">
@@ -75,6 +75,8 @@
 </template>
 
 <script>
+import db from "@/plugins/firebase";
+import firebase from "firebase";
 export default {
   name: "Question1",
   props: [
@@ -92,8 +94,36 @@ export default {
       isClick: false,
       isIcon: false,
       isCorrect: false,
+      isShow: false,
     };
   },
+  mounted() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.user = user;
+        db.collection(this.$store.state.statusCollection)
+          .where("uid", "==", user.uid)
+          .get()
+          .then((snapshot) => {
+            snapshot.forEach((document) => {
+              this.questActiveList = document.data().questActiveList;
+              if (!this.questActiveList[this.courseId]) {
+                this.questActiveList[this.courseId] = true;
+                db.collection(this.$store.state.statusCollection)
+                  .doc(document.id)
+                  .update({
+                    questActiveList: this.questActiveList,
+                  });
+                this.$router.push({ name: "PostQuest" });
+              } else {
+                this.isShow = true;
+              }
+            });
+          });
+      }
+    });
+  },
+
   methods: {
     answerCheck() {
       for (let i = 0; i < this.correctAnswer.length; i++) {

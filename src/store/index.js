@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-let month = 'june'
+let month = 'july'
 
 export default new Vuex.Store({
 
@@ -13,8 +13,9 @@ export default new Vuex.Store({
     userCollection: 'users',
     accesslogCollection: month + '_access_log',
     notificationCollection: 'notification',
-		statusCollection: month + '_status',
-		questDate: month + '_quest'
+    statusCollection: month + '_status',
+    questDate: month + '_quest',
+    month: 'July'
   },
   mutations: {
     SET_LOAD_STATUS(state, loadStatus) {

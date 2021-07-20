@@ -1,8 +1,6 @@
 <template>
   <body>
-    <main>
-      <div class="loader">Loading...</div>
-    </main>
+    <div class="loader">Loading...</div>
     <footer>
       <div class="container">
         <div class="row">

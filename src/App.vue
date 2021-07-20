@@ -1,24 +1,24 @@
 <template>
   <div class="app">
     <Header />
-		<div class="loader" v-if='is_loading'>Loading...</div>
-    <router-view v-if='!is_loading'/>
+    <div class="loader" v-if="is_loading">Loading...</div>
+    <router-view v-if="!is_loading" />
   </div>
 </template>
 
 <script>
-import Header from '@/components/Header'
+import Header from "@/components/Header";
 export default {
   name: "App",
   components: {
-    Header
+    Header,
   },
 
   computed: {
-    is_loading () {
-      return this.$store.state.load_status
-    }
-  }
+    is_loading() {
+      return this.$store.state.load_status;
+    },
+  },
 };
 </script>
 
@@ -78,7 +78,7 @@ main {
   height: 10em;
 }
 .loader {
-  margin: 60px auto;
+  margin: 100px auto;
   font-size: 10px;
   position: relative;
   text-indent: -9999em;
