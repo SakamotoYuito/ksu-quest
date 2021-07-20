@@ -7,6 +7,7 @@ import PostQuest from '@/components/PostQuest'
 import Notification from '@/components/Notification'
 import AdventureLog from '@/components/AdventureLog'
 import Reader from '@/components/Reader'
+import Temp from '@/components/Temp'
 import Loading from '@/components/Loading'
 import Admin from '@/components/management/Admin'
 import CheckIn from '@/components/management/CheckIn'
@@ -64,6 +65,11 @@ const routes = [
     path: '/Reader',
     name: 'Reader',
     component: Reader
+  },
+  {
+    path: '/Temp',
+    name: 'Temp',
+    component: Temp
   },
   {
     path: '/Loading',
