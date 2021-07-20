@@ -92,14 +92,21 @@ export default {
       }, 1000);
     },
     moveQuestionView(key) {
+      this.writeLog(key);
       if (!this.questActiveList[key]) {
-        console.log(key + "is not active");
         return;
       }
       let name = this.$store.state.month + key;
-
-      console.log(name);
       this.$router.push({ name: name });
+    },
+    writeLog(key) {
+      const now = new Date();
+      db.collection(this.$store.state.accesslogCollection).add({
+        date: now,
+        place: key,
+        answer: "クエスト受注",
+        uid: this.user.uid,
+      });
     },
   },
 };

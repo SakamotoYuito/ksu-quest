@@ -114,6 +114,7 @@ export default {
                   .update({
                     questActiveList: this.questActiveList,
                   });
+                this.writeLog();
                 this.$router.push({ name: "PostQuest" });
               } else {
                 this.isShow = true;
@@ -136,6 +137,15 @@ export default {
           }
         }
       }
+    },
+    writeLog() {
+      const now = new Date();
+      db.collection(this.$store.state.accesslogCollection).add({
+        date: now,
+        place: this.courseId,
+        answer: "問題QRコード読み込み",
+        uid: this.user.uid,
+      });
     },
     back() {
       if (!this.isClick) {
