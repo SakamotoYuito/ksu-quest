@@ -9,7 +9,7 @@
             v-for="(sentence, index) in sentences"
             v-bind:key="index"
           >
-            <li v-if="sentences.length != 0">
+            <li v-if="sentences[0] != '通知はまだありません'">
               <img src="@/assets/nao@3x.png" class="left" />
             </li>
             <li>
@@ -55,8 +55,6 @@ export default {
   name: "Notification",
   data() {
     return {
-      time: "00:00",
-      min: "",
       user: null,
       docID: null,
       sentences: [],
@@ -69,20 +67,9 @@ export default {
     };
   },
   created() {
-    this.getTime();
     this.getNotification();
   },
   methods: {
-    getTime() {
-      const now = new Date();
-      this.time = now.getHours() + ":";
-      this.min = now.getMinutes();
-      if (this.min < 10) {
-        this.time += "0" + this.min;
-      } else {
-        this.time += this.min;
-      }
-    },
     getNotification() {
       this.user = firebase.auth().currentUser;
       this.uid = this.user.uid;

@@ -14,6 +14,7 @@ export default new Vuex.Store({
     userCollection: 'users',
     accesslogCollection: month + '_access_log',
     notificationCollection: 'notification',
+    labStatusCollection: 'lab_status',
     statusCollection: month + '_status',
     questDate: month + '_quest',
     month: 'July',
