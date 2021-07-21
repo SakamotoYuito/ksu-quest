@@ -1,6 +1,9 @@
 <template>
   <div class="login">
     <div class="center-align">
+      <div class="progress" v-if="isLoading">
+        <div class="indeterminate"></div>
+      </div>
       <div class="col s12 m4 l8">
         <p>神山<br />クエスト</p>
       </div>
@@ -43,16 +46,6 @@ export default {
       userID: null,
       feedback: null,
       uid: null,
-      lastTimeNetwork: 0,
-      lastTimeSecurity: 0,
-      lastTimeDataScience: 0,
-      lastTimeRobot: 0,
-      lastTimeInfrastructure: 0,
-      lastTimeIoT: 0,
-      lastTimeFabrication: 0,
-      lastTimeBrain: 0,
-      lastTimeMedia: 0,
-      lastTimeSE: 0,
       statusTemplate: {
         uid: null,
         noticeList: {
@@ -96,6 +89,7 @@ export default {
         Media: 0,
         SE: 0,
       },
+      isLoading: false,
     };
   },
   methods: {
@@ -108,45 +102,57 @@ export default {
           .auth()
           .signInWithEmailAndPassword(email, password)
           .then((cred) => {
+            this.isLoading = true;
             this.uid = cred.user.uid;
             this.statusTemplate.uid = this.uid;
-            db.collection(this.$store.state.statusCollection)
-              .where("uid", "==", this.uid)
-              .get()
-              .then((snapshot) => {
-                if (snapshot.size == 0) {
-                  // db.collection("june_status")
-                  //   .where("uid", "==", this.uid)
-                  //   .get()
-                  //   .then((snapshot) => {});
-                  console.log(this.statusTemplate);
-                  db.collection(this.$store.state.statusCollection).add(
-                    this.statusTemplate
-                  );
-                }
-              });
-          })
-          .then(() => {
-            let doc = null;
-            let docId = null;
+            let userDoc = null;
+            let userDocId = null;
+            let joinQuestDate = null;
+            let lastTimeQuestDate = null;
             db.collection(this.$store.state.userCollection)
               .where("uid", "==", this.uid)
               .get()
               .then((snapshot) => {
                 snapshot.forEach((document) => {
-                  doc = document.data();
-                  docId = document.id;
-                  doc[this.$store.state.questDate] = true;
+                  userDoc = document.data();
+                  userDocId = document.id;
+                  joinQuestDate = userDoc[this.$store.state.questDate];
+                  lastTimeQuestDate =
+                    userDoc[this.$store.state.lastTimeQuestDate];
                 });
               })
               .then(() => {
-                db.collection(this.$store.state.userCollection)
-                  .doc(docId)
-                  .update(doc);
+                if (!joinQuestDate) {
+                  let lastTimeStatusDoc = null;
+                  if (lastTimeQuestDate) {
+                    db.collection(this.$store.state.lastTimeStatusCollection)
+                      .where("uid", "==", this.uid)
+                      .get()
+                      .then((snapshot) => {
+                        snapshot.forEach((document) => {
+                          lastTimeStatusDoc = document.data();
+                        });
+                      })
+                      .then(() => {
+                        this.takeOverData(lastTimeStatusDoc);
+                      });
+                  }
+                  setTimeout(() => {
+                    db.collection(this.$store.state.statusCollection).add(
+                      this.statusTemplate
+                    );
+                    userDoc[this.$store.state.questDate] = true;
+                    db.collection(this.$store.state.userCollection)
+                      .doc(userDocId)
+                      .update(userDoc);
+                  }, 2000);
+                }
               });
           })
           .then(() => {
-            this.$router.push({ name: "Status" });
+            setTimeout(() => {
+              this.$router.push({ name: "Status" });
+            }, 2000);
           })
           .catch((err) => {
             this.feedback = err.message;
@@ -154,6 +160,18 @@ export default {
       } else {
         this.feedback = "ユーザIDを入力してください";
       }
+    },
+    takeOverData(lastTimeStatusDoc) {
+      this.statusTemplate.Network = lastTimeStatusDoc.Network;
+      this.statusTemplate.Security = lastTimeStatusDoc.Security;
+      this.statusTemplate.DataScience = lastTimeStatusDoc.DataScience;
+      this.statusTemplate.Robot = lastTimeStatusDoc.Robot;
+      this.statusTemplate.Infrastructure = lastTimeStatusDoc.Infrastructure;
+      this.statusTemplate.IoT = lastTimeStatusDoc.IoT;
+      this.statusTemplate.Fabrication = lastTimeStatusDoc.Fabrication;
+      this.statusTemplate.Brain = lastTimeStatusDoc.Brain;
+      this.statusTemplate.Media = lastTimeStatusDoc.Media;
+      this.statusTemplate.SE = lastTimeStatusDoc.SE;
     },
     maintenance() {
       /*db.collection(this.$store.state.userCollection).get().then(snapshot => {
@@ -224,6 +242,12 @@ input {
 .btn {
   text-align: center;
   margin: 20px;
+}
+.progress {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.progress .indeterminate {
+  background-color: white;
 }
 </style>
 

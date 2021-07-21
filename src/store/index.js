@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 let month = 'july'
+let lastTimeMonth = 'june'
 
 export default new Vuex.Store({
 
@@ -15,7 +16,9 @@ export default new Vuex.Store({
     notificationCollection: 'notification',
     statusCollection: month + '_status',
     questDate: month + '_quest',
-    month: 'July'
+    month: 'July',
+    lastTimeStatusCollection: lastTimeMonth + '_status',
+    lastTimeQuestDate: lastTimeMonth + '_quest'
   },
   mutations: {
     SET_LOAD_STATUS(state, loadStatus) {
