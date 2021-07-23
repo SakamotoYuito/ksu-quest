@@ -1,17 +1,6 @@
 <template>
   <body>
     <div class="loader">Loading...</div>
-    <footer>
-      <div class="container">
-        <div class="row">
-          <div class="col s12">
-            <a class="icon">
-              <font-awesome-icon icon="arrow-left" size="3x" />
-            </a>
-          </div>
-        </div>
-      </div>
-    </footer>
   </body>
 </template>
 
@@ -64,14 +53,28 @@ export default {
       }
     },
     updateDbList(urlStatus, dbList) {
+      let pointScale = 1.0;
+
+      if (this.place in dbList["questActiveList"]) {
+        dbList["questActiveList"][this.place]["status"] = "cleared";
+        dbList["mysteryCounter"] += 1;
+        pointScale = dbList["questActiveList"][this.place]["pointScale"];
+      }
+
       urlStatus.forEach((element) => {
         let key = element.split(":")[0];
         let value = element.split(":")[1];
-        dbList[key] = Number(dbList[key]) + Number(value);
+        dbList[key] = Number(dbList[key]) + Number(value) * pointScale;
       });
-      if (this.place.includes("Q")) {
-        dbList["mysteryCounter"] += 1;
+
+      if (pointScale > 1) {
+        dbList["questActiveList"][this.place]["pointScale"] = 1.0;
       }
+
+      if (this.place == "emergency") {
+        dbList["emergencyQuest"]["status"] = "cleared";
+      }
+
       return dbList;
     },
   },

@@ -66,16 +66,49 @@ export default {
           },
         },
         questActiveList: {
-          Network: false,
-          Security: false,
-          DataScience: false,
-          Robot: false,
-          Infrastructure: false,
-          IoT: false,
-          Fabrication: false,
-          Brain: false,
-          Media: false,
-          SE: false,
+          Network: {
+            pointScale: 1,
+            status: "inactive",
+          },
+          Security: {
+            pointScale: 1,
+            status: "inactive",
+          },
+          DataScience: {
+            pointScale: 1,
+            status: "inactive",
+          },
+          Robot: {
+            pointScale: 1,
+            status: "inactive",
+          },
+          Infrastructure: {
+            pointScale: 1,
+            status: "inactive",
+          },
+          IoT: {
+            pointScale: 1,
+            status: "inactive",
+          },
+          Fabrication: {
+            pointScale: 1,
+            status: "inactive",
+          },
+          Brain: {
+            pointScale: 1,
+            status: "inactive",
+          },
+          Media: {
+            pointScale: 1,
+            status: "inactive",
+          },
+          SE: {
+            pointScale: 1,
+            status: "inactive",
+          },
+        },
+        emergencyQuest: {
+          status: "inactive",
         },
         mysteryCounter: 0,
         Network: 0,
@@ -122,30 +155,36 @@ export default {
                 });
               })
               .then(() => {
-                if (!joinQuestDate) {
+                if (!joinQuestDate && lastTimeQuestDate) {
                   let lastTimeStatusDoc = null;
-                  if (lastTimeQuestDate) {
-                    db.collection(this.$store.state.lastTimeStatusCollection)
-                      .where("uid", "==", this.uid)
-                      .get()
-                      .then((snapshot) => {
-                        snapshot.forEach((document) => {
-                          lastTimeStatusDoc = document.data();
-                        });
-                      })
-                      .then(() => {
-                        this.takeOverData(lastTimeStatusDoc);
+                  db.collection(this.$store.state.lastTimeStatusCollection)
+                    .where("uid", "==", this.uid)
+                    .get()
+                    .then((snapshot) => {
+                      snapshot.forEach((document) => {
+                        lastTimeStatusDoc = document.data();
                       });
-                  }
-                  setTimeout(() => {
+                    })
+                    .then(() => {
+                      this.takeOverData(lastTimeStatusDoc);
+                      db.collection(this.$store.state.statusCollection).add(
+                        this.statusTemplate
+                      );
+                    });
+                }
+              })
+              .then(() => {
+                if (!joinQuestDate) {
+                  if (!lastTimeQuestDate) {
                     db.collection(this.$store.state.statusCollection).add(
                       this.statusTemplate
                     );
-                    userDoc[this.$store.state.questDate] = true;
-                    db.collection(this.$store.state.userCollection)
-                      .doc(userDocId)
-                      .update(userDoc);
-                  }, 2000);
+                  }
+
+                  userDoc[this.$store.state.questDate] = true;
+                  db.collection(this.$store.state.userCollection)
+                    .doc(userDocId)
+                    .update(userDoc);
                 }
               });
           })

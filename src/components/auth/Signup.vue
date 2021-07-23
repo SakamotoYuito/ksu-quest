@@ -93,16 +93,46 @@ export default {
                 },
               },
               questActiveList: {
-                Network: false,
-                Security: false,
-                DataScience: false,
-                Robot: false,
-                Infrastructure: false,
-                IoT: false,
-                Fabrication: false,
-                Brain: false,
-                Media: false,
-                SE: false,
+                Network: {
+                  pointScale: 1,
+                  status: "inactive",
+                },
+                Security: {
+                  pointScale: 1,
+                  status: "inactive",
+                },
+                DataScience: {
+                  pointScale: 1,
+                  status: "inactive",
+                },
+                Robot: {
+                  pointScale: 1,
+                  status: "inactive",
+                },
+                Infrastructure: {
+                  pointScale: 1,
+                  status: "inactive",
+                },
+                IoT: {
+                  pointScale: 1,
+                  status: "inactive",
+                },
+                Fabrication: {
+                  pointScale: 1,
+                  status: "inactive",
+                },
+                Brain: {
+                  pointScale: 1,
+                  status: "inactive",
+                },
+                Media: {
+                  pointScale: 1,
+                  status: "inactive",
+                },
+                SE: {
+                  pointScale: 1,
+                  status: "inactive",
+                },
               },
               mysteryCounter: 0,
               Network: 0,

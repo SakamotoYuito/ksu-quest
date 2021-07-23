@@ -35,7 +35,7 @@ export default {
           name: "Loading",
           params: {
             status: rewards,
-            place: "EmergencyQuest",
+            place: "emergency",
             answer: "EmergencyQuest",
           },
         });

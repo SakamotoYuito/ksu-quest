@@ -8,7 +8,7 @@
         </div>
       </div>
     </main>
-    <footer>
+    <!-- <footer>
       <div class="container">
         <div class="row">
           <div class="col s12">
@@ -33,7 +33,7 @@
           </div>
         </div>
       </div>
-    </footer>
+    </footer> -->
   </body>
 </template>
 

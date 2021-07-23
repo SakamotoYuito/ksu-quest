@@ -23,6 +23,7 @@ import JulyBrain from '@/components/facility/July/JulyBrain'
 import JulyMedia from '@/components/facility/July/JulyMedia'
 import JulySE from '@/components/facility/July/JulySE'
 import EmergencyQuest from '@/components/facility/EmergencyQuest'
+import EmergencyQuestDescription from '@/components/EmergencyQuestDescription'
 import Survey1 from '@/components/facility/Survey1'
 import Survey2 from '@/components/facility/Survey2'
 import Survey3 from '@/components/facility/Survey3'
@@ -146,6 +147,11 @@ const routes = [
     path: '/facility/EmergencyQuest',
     name: 'EmergencyQuest',
     component: EmergencyQuest
+  },
+  {
+    path: '/EmergencyQuestDescription',
+    name: 'EmergencyQuestDescription',
+    component: EmergencyQuestDescription
   },
   {
     path: '/facility/Survey1',

@@ -19,7 +19,7 @@ export default new Vuex.Store({
     questDate: month + '_quest',
     month: 'July',
     lastTimeStatusCollection: lastTimeMonth + '_status',
-    lastTimeQuestDate: lastTimeMonth + '_quest'
+    lastTimeQuestDate: lastTimeMonth + '_quest',
   },
   mutations: {
     SET_LOAD_STATUS(state, loadStatus) {

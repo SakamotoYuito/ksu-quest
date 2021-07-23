@@ -39,38 +39,22 @@
             ><br />を手に入れた！
           </p>
           <p>
-            解説を読んだら、下の 戻るボタン を押してステータスを確認しよう。
+            解説を読んだら、下の <br />「報酬を受け取る」
+            を押してステータスを確認しよう。
           </p>
           <img :src="courseImg" class="courseImg center" />
-        </div>
-      </div>
-    </main>
-    <footer>
-      <div class="container">
-        <div class="row">
-          <div class="col s12">
-            <a class="icon">
-              <a
-                v-if="!isIcon"
-                @mousedown="focusColor"
-                @touchstart="focusColor"
-              >
-                <font-awesome-icon icon="arrow-left" size="3x" />
-              </a>
-              <a
-                v-if="isIcon"
-                @mouseup="back"
-                @touchend="back"
-                @mouseover="basicColor"
-                @touchmove="basicColor"
-              >
-                <font-awesome-icon icon="arrow-left" size="3x" color="gray" />
-              </a>
-            </a>
+          <div class="rewardButton">
+            <button
+              class="btn waves-effect waves-light"
+              name="action"
+              @click="back"
+            >
+              <a>報酬を受け取る</a>
+            </button>
           </div>
         </div>
       </div>
-    </footer>
+    </main>
   </body>
 </template>
 
@@ -107,18 +91,27 @@ export default {
           .then((snapshot) => {
             snapshot.forEach((document) => {
               this.questActiveList = document.data().questActiveList;
-              if (!this.questActiveList[this.courseId]) {
-                this.questActiveList[this.courseId] = true;
-                db.collection(this.$store.state.statusCollection)
-                  .doc(document.id)
-                  .update({
-                    questActiveList: this.questActiveList,
-                  });
-                this.writeLog();
-                this.$router.push({ name: "PostQuest" });
-              } else {
-                this.isShow = true;
+
+              switch (this.questActiveList[this.courseId]["status"]) {
+                case "inactive":
+                  this.questActiveList[this.courseId]["status"] = "active";
+                  db.collection(this.$store.state.statusCollection)
+                    .doc(document.id)
+                    .update({
+                      questActiveList: this.questActiveList,
+                    });
+                  this.writeLog();
+                  this.$router.push({ name: "PostQuest" });
+                  break;
+                case "active":
+                  break;
+                case "cleared":
+                  this.$router.push({ name: "PostQuest" });
+                  break;
+                default:
+                  break;
               }
+              this.isShow = true;
             });
           });
       }
@@ -201,5 +194,14 @@ export default {
 }
 .course a {
   color: Yellow;
+}
+
+.btn a {
+  color: white;
+  text-align: center;
+  margin: 20px;
+}
+footer {
+  z-index: 99;
 }
 </style>
