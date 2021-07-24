@@ -2,7 +2,7 @@
   <body>
     <main>
       <div class="title">
-        <p>Questリスト</p>
+        <p>クエスト一覧</p>
       </div>
       <div>
         <ul>
@@ -11,35 +11,63 @@
               emergencyQuest['status'] == 'active' ||
               emergencyQuest['status'] == 'cleared'
             "
-            class="card-panel"
+            class="card-panel z-depth-2"
             :class="{
               cleared: emergencyQuest['status'] == 'cleared',
               blinking: emergencyQuest['status'] == 'active',
             }"
             @click="moveQuestionView('emergency')"
           >
-            !!!緊急クエスト!!! <br />
+            <img
+              v-if="emergencyQuest['status'] == 'cleared'"
+              class="clear"
+              src="@/assets/questClear.png"
+            />
+            <img src="@/assets/screw.png" class="screw1" />
+            <img src="@/assets/screw.png" class="screw2" />
+            <img src="@/assets/screw.png" class="screw3" />
+            <img src="@/assets/screw.png" class="screw4" />
+            <p>!!!緊急クエスト!!!</p>
             {{ questCondition["emergencyQuest"]["message"] }}
             場所：{{ questCondition["emergencyQuest"]["place"] }}
           </div>
-
           <li v-for="(key, index) in courseIdList" :key="index">
             <div
-              class="card-panel"
+              class="card-panel z-depth-2"
               :class="{
                 inactive: questActiveList[key]['status'] == 'inactive',
                 cleared: questActiveList[key]['status'] == 'cleared',
               }"
               @click="moveQuestionView(key)"
             >
-              {{ key }}コース <br />
-              {{ questCondition["condition"][key].congestion }}人受注 場所：{{
-                questCondition["condition"][key].place
-              }}
-
-              <span v-if="questActiveList[key]['pointScale'] > 1">
+              <img src="@/assets/screw.png" class="screw1" />
+              <img src="@/assets/screw.png" class="screw2" />
+              <img src="@/assets/screw.png" class="screw3" />
+              <img src="@/assets/screw.png" class="screw4" />
+              <img
+                v-if="questActiveList[key]['status'] == 'cleared'"
+                class="clear"
+                src="@/assets/questClear.png"
+              />
+              <p class="reward" v-if="questActiveList[key]['pointScale'] > 1">
                 報酬{{ questActiveList[key]["pointScale"] }}倍！
-              </span>
+              </p>
+              <div>
+                <p class="questName">
+                  {{ questCondition["condition"][key].courseName }}
+                </p>
+              </div>
+              <a>
+                魔獣
+                <a class="a1">
+                  {{ questCondition["condition"][key].monsterName }}
+                </a>
+                を倒せ！<br />
+                {{ questCondition["condition"][key].congestion }}人受注中
+                <a class="a2">
+                  場所：{{ questCondition["condition"][key].place }}
+                </a>
+              </a>
             </div>
           </li>
         </ul>
@@ -51,7 +79,6 @@
 <script>
 import db from "@/plugins/firebase";
 import firebase from "firebase";
-
 export default {
   name: "PostQuest",
   data() {
@@ -66,29 +93,19 @@ export default {
       congestionSubscribe: null,
     };
   },
-
   mounted() {
     this.getUserInfo();
     this.getQuestInfo();
-    // this.postQuest('Network')
-    // setTimeout(() => {
-    //   this.pushReceivingQuest()
-    // }, 1000)
   },
   beforeDestroy() {
     if (this.userSubscribe != null) {
       this.userSubscribe();
     }
-
     if (this.congestionSubscribe != null) {
       this.congestionSubscribe();
     }
   },
   methods: {
-    pushReceivingQuest() {
-      console.log(this.questCondition);
-      db.collection("congestion").doc("questList").update(this.questCondition);
-    },
     getUserInfo() {
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
@@ -111,7 +128,6 @@ export default {
         .onSnapshot((snapshot) => {
           snapshot.forEach((document) => {
             this.questCondition = document.data();
-
             this.courseIdList = [];
             for (let key of Object.entries(this.questCondition["condition"])) {
               this.courseIdList.push(key[0]);
@@ -139,10 +155,8 @@ export default {
         ) {
           return;
         }
-
         this.$router.push({ name: "EmergencyQuestDescription" });
       }
-
       this.writeLog(key);
       if (
         this.questActiveList[key]["status"] == "inactive" ||
@@ -167,8 +181,86 @@ export default {
 </script>
 
 <style>
+.card-panel {
+  position: relative;
+}
+.card-panel .screw1 {
+  position: absolute;
+  width: 15px;
+  height: auto;
+  top: 0;
+  left: 0;
+  margin: auto;
+  transform: rotate(-20deg);
+}
+.card-panel .screw2 {
+  position: absolute;
+  width: 15px;
+  height: auto;
+  top: 0;
+  right: 0;
+  margin: auto;
+  transform: rotate(5deg);
+}
+.card-panel .screw3 {
+  position: absolute;
+  width: 15px;
+  height: auto;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  transform: rotate(-5deg);
+}
+.card-panel .screw4 {
+  position: absolute;
+  width: 15px;
+  height: auto;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  transform: rotate(-30deg);
+}
+.card-panel .clear {
+  position: absolute;
+  width: 65%;
+  max-width: 200px;
+  height: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  transform: rotate(-10deg);
+}
+.card-panel p {
+  color: black;
+  margin: 0;
+  padding-bottom: 5px;
+}
+.card-panel .questName {
+  text-align: left;
+  text-decoration: underline solid black;
+}
+.card-panel .reward {
+  font-weight: bold;
+  text-align: right;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  color: red;
+  padding: 0;
+}
+.card-panel a {
+  color: black;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: 13px;
+}
+.card-panel .a1 {
+  font-weight: bold;
+}
+.card-panel .a2 {
+  text-align: right;
+}
 .inactive {
-  opacity: 0.5;
+  opacity: 0.6;
   background-color: white;
 }
 .cleared {

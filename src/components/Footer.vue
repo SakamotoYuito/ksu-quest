@@ -1,5 +1,5 @@
 <template>
-  <footer>
+  <footer v-if="!isHome">
     <div class="container">
       <div class="row">
         <div class="col s3" @click="movePage('Status')">
@@ -43,9 +43,18 @@
 export default {
   name: "Footer",
   data() {
-    return {};
+    return {
+      isHome: true,
+    };
   },
-
+  watch: {
+    $route: function () {
+      this.isHome = this.$router.history.current.name === "Home";
+    },
+  },
+  mounted() {
+    this.isHome = this.$router.history.current.name === "Home";
+  },
   methods: {
     isFocus(iconName) {
       if (iconName == this.getPageName()) {
@@ -68,10 +77,9 @@ export default {
       }
     },
     movePage(pageName) {
-      if (this.$route.name == pageName) {
+      if (this.$route.name == pageName || this.$route.name == "Loading") {
         return;
       }
-
       this.$router.push({ name: pageName });
     },
   },
