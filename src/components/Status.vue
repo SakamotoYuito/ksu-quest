@@ -5,7 +5,7 @@
         <p>通知が来ています</p>
       </div>
       <div v-if="!isNotification" class="center-align">
-        <p v-if="isCheckIn">クエストⅣ：チェックイン中</p>
+        <p v-if="isCheckIn">QuestⅣ：チェックイン中</p>
       </div>
       <div class="chart-container">
         <RadarChart

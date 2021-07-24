@@ -1,8 +1,12 @@
 <template>
   <body>
     <main>
-      <div class="title">
-        <p>クエスト一覧</p>
+      <div class="center-align">
+        <p v-if="isCheckIn">QuestⅣ：チェックイン中</p>
+        <p v-if="!isCheckIn">QuestⅣにチェックインしてください</p>
+      </div>
+      <div class="pageTitle">
+        <p>Questメニュー</p>
       </div>
       <div>
         <ul>
@@ -27,7 +31,7 @@
             <img src="@/assets/screw.png" class="screw2" />
             <img src="@/assets/screw.png" class="screw3" />
             <img src="@/assets/screw.png" class="screw4" />
-            <p>!!!緊急クエスト!!!</p>
+            <p class="questName">!!!緊急Quest!!!</p>
             {{ questCondition["emergencyQuest"]["message"] }}
             場所：{{ questCondition["emergencyQuest"]["place"] }}
           </div>
@@ -57,16 +61,18 @@
                   {{ questCondition["condition"][key].courseName }}
                 </p>
               </div>
-              <a>
+              <a class="monster">
                 魔獣
-                <a class="a1">
+                <a class="bold">
                   {{ questCondition["condition"][key].monsterName }}
                 </a>
                 を倒せ！<br />
+              </a>
+              <a class="place">
+                場所：{{ questCondition["condition"][key].place }}<br />
+              </a>
+              <a class="postNumber">
                 {{ questCondition["condition"][key].congestion }}人受注中
-                <a class="a2">
-                  場所：{{ questCondition["condition"][key].place }}
-                </a>
               </a>
             </div>
           </li>
@@ -84,6 +90,7 @@ export default {
   data() {
     return {
       user: null,
+      isCheckIn: false,
       questCondition: null,
       questId: null,
       questActiveList: null,
@@ -94,6 +101,7 @@ export default {
     };
   },
   mounted() {
+    this.getCheckin();
     this.getUserInfo();
     this.getQuestInfo();
   },
@@ -106,6 +114,20 @@ export default {
     }
   },
   methods: {
+    getCheckin() {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          db.collection(this.$store.state.userCollection)
+            .where("uid", "==", user.uid)
+            .get()
+            .then((snapshot) => {
+              snapshot.forEach((document) => {
+                this.isCheckIn = document.data().checkIn;
+              });
+            });
+        }
+      });
+    },
     getUserInfo() {
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
@@ -140,13 +162,13 @@ export default {
           });
         });
     },
-    postQuest(questName) {
-      this.questId = questName;
-      this.getQuestInfo();
-      setTimeout(() => {
-        this.questCondition["condition"][this.questId]["congestion"] += 1;
-      }, 1000);
-    },
+    // postQuest(questName) {
+    //   this.questId = questName;
+    //   this.getQuestInfo();
+    //   setTimeout(() => {
+    //     this.questCondition["condition"][this.questId]["congestion"] += 1;
+    //   }, 1000);
+    // },
     moveQuestionView(key) {
       if (key == "emergency") {
         if (
@@ -169,9 +191,10 @@ export default {
     },
     writeLog(key) {
       const now = new Date();
+      let place = key + "/checkin:" + this.isCheckIn;
       db.collection(this.$store.state.accesslogCollection).add({
         date: now,
-        place: key,
+        place: place,
         answer: "クエスト受注",
         uid: this.user.uid,
       });
@@ -181,6 +204,13 @@ export default {
 </script>
 
 <style>
+.pageTitle {
+  margin: 5px;
+}
+.pageTitle p {
+  font-size: 1.8em;
+  text-align: center;
+}
 .card-panel {
   position: relative;
 }
@@ -191,7 +221,7 @@ export default {
   top: 0;
   left: 0;
   margin: auto;
-  transform: rotate(-20deg);
+  transform: rotate(-5deg);
 }
 .card-panel .screw2 {
   position: absolute;
@@ -209,7 +239,7 @@ export default {
   bottom: 0;
   left: 0;
   margin: auto;
-  transform: rotate(-5deg);
+  transform: rotate(10deg);
 }
 .card-panel .screw4 {
   position: absolute;
@@ -218,11 +248,11 @@ export default {
   bottom: 0;
   right: 0;
   margin: auto;
-  transform: rotate(-30deg);
+  transform: rotate(-10deg);
 }
 .card-panel .clear {
   position: absolute;
-  width: 65%;
+  width: 50%;
   max-width: 200px;
   height: auto;
   top: 0;
@@ -230,7 +260,7 @@ export default {
   bottom: 0;
   left: 0;
   margin: auto;
-  transform: rotate(-10deg);
+  transform: rotate(-30deg);
 }
 .card-panel p {
   color: black;
@@ -253,10 +283,10 @@ export default {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   font-size: 13px;
 }
-.card-panel .a1 {
+.card-panel .bold {
   font-weight: bold;
 }
-.card-panel .a2 {
+.card-panel .place {
   text-align: right;
 }
 .inactive {

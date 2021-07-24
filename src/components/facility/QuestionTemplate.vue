@@ -79,12 +79,21 @@ export default {
       isIcon: false,
       isCorrect: false,
       isShow: false,
+      isCheckIn: false,
     };
   },
   mounted() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.user = user;
+        db.collection(this.$store.state.userCollection)
+          .where("uid", "==", user.uid)
+          .get()
+          .then((snapshot) => {
+            snapshot.forEach((document) => {
+              this.isCheckIn = document.data().checkIn;
+            });
+          });
         db.collection(this.$store.state.statusCollection)
           .where("uid", "==", user.uid)
           .get()
@@ -133,21 +142,23 @@ export default {
     },
     writeLog() {
       const now = new Date();
+      let place = this.courseId + "/checkin:" + this.isCheckIn;
       db.collection(this.$store.state.accesslogCollection).add({
         date: now,
-        place: this.courseId,
+        place: place,
         answer: "問題QRコード読み込み",
         uid: this.user.uid,
       });
     },
     back() {
       if (!this.isClick) {
+        let place = this.courseId + "/checkin:" + this.isCheckIn;
         if (this.isCorrect) {
           this.$router.push({
             name: "Loading",
             params: {
               status: this.rewards,
-              place: this.courseId,
+              place: place,
               answer: this.userAnswer,
             },
           });

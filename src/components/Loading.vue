@@ -54,27 +54,23 @@ export default {
     },
     updateDbList(urlStatus, dbList) {
       let pointScale = 1.0;
-
-      if (this.place in dbList["questActiveList"]) {
-        dbList["questActiveList"][this.place]["status"] = "cleared";
+      let courseId = this.place.split("/")[0];
+      if (courseId in dbList["questActiveList"]) {
+        dbList["questActiveList"][courseId]["status"] = "cleared";
         dbList["mysteryCounter"] += 1;
-        pointScale = dbList["questActiveList"][this.place]["pointScale"];
+        pointScale = dbList["questActiveList"][courseId]["pointScale"];
       }
-
       urlStatus.forEach((element) => {
         let key = element.split(":")[0];
         let value = element.split(":")[1];
         dbList[key] = Number(dbList[key]) + Number(value) * pointScale;
       });
-
       if (pointScale > 1) {
-        dbList["questActiveList"][this.place]["pointScale"] = 1.0;
+        dbList["questActiveList"][courseId]["pointScale"] = 1.0;
       }
-
-      if (this.place == "emergency") {
+      if (courseId == "emergency") {
         dbList["emergencyQuest"]["status"] = "cleared";
       }
-
       return dbList;
     },
   },
