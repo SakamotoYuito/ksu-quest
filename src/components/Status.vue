@@ -225,20 +225,6 @@ export default {
         this.isBell = false;
       }
     },
-    focusColor(element) {
-      if (element == "camera") {
-        this.isCamera = true;
-      } else if (element == "bell") {
-        this.isBell = true;
-      }
-    },
-    basicColor(element) {
-      if (element == "camera") {
-        this.isCamera = false;
-      } else if (element == "bell") {
-        this.isBell = false;
-      }
-    },
     checkNotification() {
       if (this.noticeList) {
         for (let i = 0; i < Object.keys(this.noticeList).length; i++) {

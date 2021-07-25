@@ -19,6 +19,7 @@
     "vue-qrcode-reader": "^3.0.0",
     "vue-router": "^3.5.1",
     "vuefire": "^3.0.0-alpha.2",
+    "vuejs-dialog": "^1.4.2",
     "vuex": "^3.6.2"
   },
   "devDependencies": {

@@ -1,56 +1,76 @@
 <template>
-  <body v-if="isShow">
+  <body>
     <main>
-      <div v-if="!isCorrect">
-        <div class="notification">
-          <p>{{ monsterName }}</p>
-          <p>解答</p>
+      <div class="confirm center-align" v-if="isConfirm">
+        <div class="card-panel white">
+          <p class="questTitle1">スキル<br />{{ courseName }}</p>
+          <p class="questTitle2">を手に入れろ！</p>
         </div>
-        <div class="center-align">
-          <form @submit.prevent="answerCheck">
-            <div class="field">
-              <input
-                class="white-text"
-                type="text"
-                name="answer"
-                placeholder="解答を入力"
-                v-model="userAnswer"
-              />
+        <p class="message">このQuestを受注しますか？</p>
+        <div class="row">
+          <a class="waves-effect cancel btn col s6" @click="cancelQuest">
+            キャンセル
+          </a>
+          <a
+            class="waves-effect waves-light btn col s6"
+            @click="pushQuestCondition"
+          >
+            受注
+          </a>
+        </div>
+      </div>
+      <div v-if="!isConfirm">
+        <div v-if="!isCorrect">
+          <div class="notification">
+            <p>{{ monsterName }}</p>
+            <p>解答</p>
+          </div>
+          <div class="center-align">
+            <form @submit.prevent="answerCheck">
+              <div class="field">
+                <input
+                  class="white-text"
+                  type="text"
+                  name="answer"
+                  placeholder="解答を入力"
+                  v-model="userAnswer"
+                />
+              </div>
+              <a v-if="feedback" class="red-text">{{ feedback }}<br /></a>
+              <button
+                class="btn waves-effect waves-light"
+                type="submit"
+                name="action"
+              >
+                <a>解答する</a>
+              </button>
+            </form>
+          </div>
+        </div>
+        <div v-if="isCorrect" class="circle">
+          <a />
+        </div>
+        <div class="course center">
+          <div v-if="isCorrect">
+            <p>
+              スキル
+              <a>{{ courseName }}</a
+              ><br />を手に入れた！
+            </p>
+            <p>
+              解説を読んだら、下の <br />「報酬を受け取る」
+              を押してステータスを確認しよう。
+            </p>
+            <img :src="courseImg" class="courseImg center" />
+            <div class="rewardButton">
+              <button
+                class="btn waves-effect waves-light"
+                name="action"
+                @click="back"
+              >
+                <a>報酬を受け取る</a>
+              </button>
             </div>
-            <a v-if="feedback" class="red-text">{{ feedback }}<br /></a>
-            <button
-              class="btn waves-effect waves-light"
-              type="submit"
-              name="action"
-            >
-              <a>解答する</a>
-            </button>
-          </form>
-        </div>
-      </div>
-      <div v-if="isCorrect" class="circle">
-        <a />
-      </div>
-      <div class="course center">
-        <div v-if="isCorrect">
-          <p>
-            スキル
-            <a>{{ courseName }}</a
-            ><br />を手に入れた！
-          </p>
-          <p>
-            解説を読んだら、下の <br />「報酬を受け取る」
-            を押してステータスを確認しよう。
-          </p>
-          <img :src="courseImg" class="courseImg center" />
-          <div class="rewardButton">
-            <button
-              class="btn waves-effect waves-light"
-              name="action"
-              @click="back"
-            >
-              <a>報酬を受け取る</a>
-            </button>
           </div>
         </div>
       </div>
@@ -78,8 +98,9 @@ export default {
       isClick: false,
       isIcon: false,
       isCorrect: false,
-      isShow: false,
       isCheckIn: false,
+      isConfirm: false,
+      documentId: null,
     };
   },
   mounted() {
@@ -100,27 +121,10 @@ export default {
           .then((snapshot) => {
             snapshot.forEach((document) => {
               this.questActiveList = document.data().questActiveList;
-
-              switch (this.questActiveList[this.courseId]["status"]) {
-                case "inactive":
-                  this.questActiveList[this.courseId]["status"] = "active";
-                  db.collection(this.$store.state.statusCollection)
-                    .doc(document.id)
-                    .update({
-                      questActiveList: this.questActiveList,
-                    });
-                  this.writeLog();
-                  this.$router.push({ name: "PostQuest" });
-                  break;
-                case "active":
-                  break;
-                case "cleared":
-                  this.$router.push({ name: "PostQuest" });
-                  break;
-                default:
-                  break;
+              this.documentId = document.id;
+              if (this.questActiveList[this.courseId]["status"] == "inactive") {
+                this.isConfirm = true;
               }
-              this.isShow = true;
             });
           });
       }
@@ -128,6 +132,30 @@ export default {
   },
 
   methods: {
+    cancelQuest() {
+      this.$router.push({ name: "PostQuest" });
+    },
+    pushQuestCondition() {
+      switch (this.questActiveList[this.courseId]["status"]) {
+        case "inactive":
+          this.questActiveList[this.courseId]["status"] = "active";
+          db.collection(this.$store.state.statusCollection)
+            .doc(this.documentId)
+            .update({
+              questActiveList: this.questActiveList,
+            });
+          this.writeLog();
+          this.$router.push({ name: "PostQuest" });
+          break;
+        case "active":
+          break;
+        case "cleared":
+          this.$router.push({ name: "PostQuest" });
+          break;
+        default:
+          break;
+      }
+    },
     answerCheck() {
       for (let i = 0; i < this.correctAnswer.length; i++) {
         if (this.userAnswer == this.correctAnswer[i]) {
@@ -170,17 +198,30 @@ export default {
         }
       }
     },
-    focusColor() {
-      this.isIcon = true;
-    },
-    basicColor() {
-      this.isIcon = false;
-    },
   },
 };
 </script>
 
 <style>
+.cancel {
+  background-color: white;
+  color: black;
+}
+.confirm {
+  padding-top: 50px;
+}
+.questTitle1 {
+  font-size: 20px;
+  line-height: 1.5;
+}
+.questTitle2 {
+  font-size: 18px;
+  line-height: 1;
+}
+.message {
+  font-size: 15px;
+  margin-top: 50px;
+}
 .circle {
   position: relative;
   margin: 60px auto;

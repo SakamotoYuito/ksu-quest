@@ -60,32 +60,6 @@
         </div>
       </div>
     </main>
-    <footer>
-      <div class="container">
-        <div class="row">
-          <div class="col s12">
-            <a class="icon">
-              <a
-                v-if="!isIcon"
-                @mousedown="focusColor"
-                @touchstart="focusColor"
-              >
-                <font-awesome-icon icon="arrow-left" size="3x" />
-              </a>
-              <a
-                v-if="isIcon"
-                @mouseup="back"
-                @touchend="back"
-                @mouseover="basicColor"
-                @touchmove="basicColor"
-              >
-                <font-awesome-icon icon="arrow-left" size="3x" color="gray" />
-              </a>
-            </a>
-          </div>
-        </div>
-      </div>
-    </footer>
   </body>
 </template>
 
@@ -130,19 +104,6 @@ export default {
       } else {
         this.feedback = "選択してください";
       }
-    },
-    back() {
-      if (!this.isClick) {
-        this.$router.push({ name: "Status" });
-        this.isClick = true;
-        this.isIcon = false;
-      }
-    },
-    focusColor() {
-      this.isIcon = true;
-    },
-    basicColor() {
-      this.isIcon = false;
     },
   },
 };

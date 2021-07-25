@@ -101,19 +101,6 @@ export default {
         uid: this.uid,
       });
     },
-    back() {
-      if (!this.isClick) {
-        this.$router.push({ name: "Status" });
-        this.isClick = true;
-        this.isIcon = false;
-      }
-    },
-    focusColor() {
-      this.isIcon = true;
-    },
-    basicColor() {
-      this.isIcon = false;
-    },
   },
 };
 </script>

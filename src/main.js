@@ -16,13 +16,12 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false
 Vue.use(VueQrcodeReader)
-
 Vue.use(Vuex)
 
 let baseApp
 
 firebase.auth().onAuthStateChanged(() => {
-  if(!baseApp) {
+  if (!baseApp) {
     baseApp = new Vue({
       router,
       store,
