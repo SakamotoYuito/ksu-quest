@@ -61,7 +61,6 @@
               解説を読んだら、下の <br />「報酬を受け取る」
               を押してステータスを確認しよう。
             </p>
-            <img :src="courseImg" class="courseImg center" />
             <div class="rewardButton">
               <button
                 class="btn waves-effect waves-light"
@@ -71,6 +70,7 @@
                 <a>報酬を受け取る</a>
               </button>
             </div>
+            <img :src="courseImg" class="courseImg center" />
           </div>
         </div>
       </div>

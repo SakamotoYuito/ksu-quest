@@ -31,9 +31,18 @@
             <img src="@/assets/screw.png" class="screw2" />
             <img src="@/assets/screw.png" class="screw3" />
             <img src="@/assets/screw.png" class="screw4" />
-            <p class="questName">!!!緊急Quest!!!</p>
-            {{ questCondition["emergencyQuest"]["message"] }}
-            場所：{{ questCondition["emergencyQuest"]["place"] }}
+            <p
+              :class="{
+                emergency: emergencyQuest['status'] == 'active',
+                questName: emergencyQuest['status'] == 'cleared',
+              }"
+            >
+              !!!緊急Quest!!!
+            </p>
+            <a class="place">
+              {{ questCondition["emergencyQuest"]["message"] }}<br />
+              場所：{{ questCondition["emergencyQuest"]["place"] }}
+            </a>
           </div>
           <li v-for="(key, index) in courseIdList" :key="index">
             <div
@@ -162,13 +171,6 @@ export default {
           });
         });
     },
-    // postQuest(questName) {
-    //   this.questId = questName;
-    //   this.getQuestInfo();
-    //   setTimeout(() => {
-    //     this.questCondition["condition"][this.questId]["congestion"] += 1;
-    //   }, 1000);
-    // },
     moveQuestionView(key) {
       if (key == "emergency") {
         if (
@@ -290,21 +292,26 @@ export default {
   text-align: right;
 }
 .inactive {
-  opacity: 0.6;
+  opacity: 0.1;
   background-color: white;
 }
 .cleared {
   background-color: lightgreen;
 }
+.card-panel .emergency {
+  color: white;
+}
 .blinking {
-  background-color: #fc2b7f;
+  background-color: #f15b15;
+  color: white;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   -webkit-animation: blink 1s ease-in-out infinite alternate;
   -moz-animation: blink 1s ease-in-out infinite alternate;
   animation: blink 1s ease-in-out infinite alternate;
 }
 @-webkit-keyframes blink {
   0% {
-    opacity: 0.4;
+    opacity: 0.6;
   }
   100% {
     opacity: 1;
@@ -312,7 +319,7 @@ export default {
 }
 @-moz-keyframes blink {
   0% {
-    opacity: 0.4;
+    opacity: 0.6;
   }
   100% {
     opacity: 1;
@@ -320,7 +327,7 @@ export default {
 }
 @keyframes blink {
   0% {
-    opacity: 0.4;
+    opacity: 0.6;
   }
   100% {
     opacity: 1;

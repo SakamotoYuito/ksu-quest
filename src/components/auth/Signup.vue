@@ -92,6 +92,9 @@ export default {
                   name: "message3",
                 },
               },
+              emergencyQuest: {
+                status: "inactive",
+              },
               questActiveList: {
                 Network: {
                   pointScale: 1,

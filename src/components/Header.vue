@@ -1,5 +1,5 @@
 <template>
-  <header v-if="!isHome">
+  <header v-if="!isHome && !isSignup">
     <nav>
       <div class="nav-wrapper">
         <img src="@/assets/ksu-quest2.png" class="brand-logo" />
@@ -20,15 +20,18 @@ export default {
   data() {
     return {
       isHome: true,
+      isSignup: true,
     };
   },
   watch: {
     $route: function () {
       this.isHome = this.$router.history.current.name === "Home";
+      this.isSignup = this.$router.history.current.name === "Signup";
     },
   },
   mounted() {
     this.isHome = this.$router.history.current.name === "Home";
+    this.isSignup = this.$router.history.current.name === "Signup";
   },
   methods: {
     logout() {

@@ -1,5 +1,5 @@
 <template>
-  <footer v-if="!isHome">
+  <footer v-if="!isHome && !isSignup">
     <div class="container">
       <div class="row">
         <div class="col s3" @click="movePage('Status')">
@@ -45,15 +45,18 @@ export default {
   data() {
     return {
       isHome: true,
+      isSignup: true,
     };
   },
   watch: {
     $route: function () {
       this.isHome = this.$router.history.current.name === "Home";
+      this.isSignup = this.$router.history.current.name === "Signup";
     },
   },
   mounted() {
     this.isHome = this.$router.history.current.name === "Home";
+    this.isSignup = this.$router.history.current.name === "Signup";
   },
   methods: {
     isFocus(iconName) {
