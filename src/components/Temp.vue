@@ -18,11 +18,15 @@ export default {
   },
   mounted() {
     let urlStatus = this.$route.query.status;
+    let urlPlace = this.$route.query.place;
     let urlStatusList = [];
     if (!Array.isArray(urlStatus)) {
       urlStatusList.push(urlStatus);
     } else {
       urlStatusList = urlStatus;
+    }
+    if (urlPlace == null) {
+      urlPlace = "臨時措置";
     }
     if (urlStatusList) {
       this.message = "反映中です．．．";
@@ -31,7 +35,7 @@ export default {
           name: "Loading",
           params: {
             status: urlStatusList,
-            place: "臨時措置",
+            place: urlPlace,
             answer: urlStatusList,
           },
         });

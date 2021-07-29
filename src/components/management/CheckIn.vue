@@ -3,7 +3,7 @@
     <main>
       <div class="CheckIn">
         <p>チェックインが<br />完了しました！</p>
-        <p>ステータス画面に戻ります</p>
+        <p>Questメニューページに<br />移動します</p>
         <div class="loader">Loading...</div>
       </div>
     </main>

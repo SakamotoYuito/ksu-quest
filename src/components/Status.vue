@@ -4,6 +4,9 @@
       <div v-if="isNotification" class="blinking notice center-align">
         <p>通知が来ています</p>
       </div>
+      <div v-if="isEmergency" class="blinking notice center-align">
+        <p>緊急Questが来ています</p>
+      </div>
       <div v-if="!isNotification" class="center-align">
         <p v-if="isCheckIn">QuestⅣ：チェックイン中</p>
       </div>
@@ -45,6 +48,7 @@ export default {
       Media: 0,
       SE: 0,
       noticeList: null,
+      emergencyQuest: null,
       datacollection: null,
       options: {
         responsive: true,
@@ -90,6 +94,7 @@ export default {
       isCamera: false,
       isBell: false,
       isNotification: false,
+      isEmergency: false,
       isRead: false,
       unsubscribe: null,
     };
@@ -152,8 +157,10 @@ export default {
           .onSnapshot((querySnapshot) => {
             querySnapshot.forEach((doc) => {
               this.noticeList = doc.data().noticeList;
+              this.emergencyQuest = doc.data().emergencyQuest;
             });
             this.checkNotification();
+            this.checkEmergencyQuest();
           });
         store.commit("SET_UNSUBSCRIBE", this.unsubscribe);
       }
@@ -237,6 +244,13 @@ export default {
         }
       } else {
         this.$router.push({ name: "Home" });
+      }
+    },
+    checkEmergencyQuest() {
+      if (this.emergencyQuest["status"] == "active") {
+        this.isEmergency = true;
+      } else {
+        this.isEmergency = false;
       }
     },
   },
