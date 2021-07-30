@@ -260,6 +260,7 @@ export default {
 <style>
 .notice p {
   background-color: Red;
+  margin: 5px;
 }
 .chart-container {
   width: 100%;
@@ -293,7 +294,6 @@ export default {
   margin-left: auto;
   margin-right: auto;
 }
-
 .blinking {
   -webkit-animation: blink 1s ease-in-out infinite alternate;
   -moz-animation: blink 1s ease-in-out infinite alternate;

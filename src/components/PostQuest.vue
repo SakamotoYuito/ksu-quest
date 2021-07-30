@@ -193,7 +193,7 @@ export default {
     },
     writeLog(key) {
       const now = new Date();
-      let place = key + "/checkin:" + this.isCheckIn;
+      let place = key + "/" + this.isCheckIn;
       db.collection(this.$store.state.accesslogCollection).add({
         date: now,
         place: place,
@@ -302,7 +302,7 @@ export default {
   color: white;
 }
 .blinking {
-  background-color: #f15b15;
+  background-color: #f0432c;
   color: white;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   -webkit-animation: blink 1s ease-in-out infinite alternate;

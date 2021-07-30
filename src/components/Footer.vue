@@ -57,6 +57,7 @@ export default {
     $route: function () {
       this.isHome = this.$router.history.current.name === "Home";
       this.isSignup = this.$router.history.current.name === "Signup";
+      this.getNotification();
     },
   },
   mounted() {

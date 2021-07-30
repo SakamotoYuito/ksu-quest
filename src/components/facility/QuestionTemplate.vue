@@ -170,7 +170,7 @@ export default {
     },
     writeLog() {
       const now = new Date();
-      let place = this.courseId + "/checkin:" + this.isCheckIn;
+      let place = this.courseId + "/" + this.isCheckIn;
       db.collection(this.$store.state.accesslogCollection).add({
         date: now,
         place: place,
@@ -180,14 +180,14 @@ export default {
     },
     back() {
       if (!this.isClick) {
-        let place = this.courseId + "/checkin:" + this.isCheckIn;
+        let place = this.courseId + "/" + this.isCheckIn;
         if (this.isCorrect) {
           this.$router.push({
             name: "Loading",
             params: {
               status: this.rewards,
               place: place,
-              answer: this.userAnswer,
+              answer: "問題解答",
             },
           });
         } else {

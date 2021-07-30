@@ -23,6 +23,9 @@
           ロボット研究所での謎を解き，見事ハッキングを解除した勇者には新たなスキルを授ける．
         </p>
         <p class="sign">神山Quest リーダー</p>
+        <div class="center">
+          <img src="@/assets/emergency.png" class="robot center" />
+        </div>
       </div>
     </main>
   </body>
@@ -56,5 +59,10 @@ export default {
   font-size: 15px;
   font-weight: bold;
   text-align: right;
+}
+.robot {
+  width: 70%;
+  height: auto;
+  margin: 5px;
 }
 </style>
