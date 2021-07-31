@@ -187,7 +187,8 @@ export default {
             params: {
               status: this.rewards,
               place: place,
-              answer: "問題解答",
+              answer:
+                "問題解答/" + this.questActiveList[this.courseId]["pointScale"],
             },
           });
         } else {
