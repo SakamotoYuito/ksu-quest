@@ -62,9 +62,22 @@
                 class="clear"
                 src="@/assets/questClear.png"
               />
-              <p class="reward" v-if="questActiveList[key]['pointScale'] > 1">
-                報酬{{ questActiveList[key]["pointScale"] }}倍！
-              </p>
+              <!-- <div
+                class="reward"
+                v-if="
+                  questActiveList[key]['pointScale'] > 1 &&
+                  questActiveList[key]['status'] != 'cleared'
+                "
+              > -->
+              <img
+                src="@/assets/rewardTwice.png"
+                class="reward"
+                v-if="
+                  questActiveList[key]['pointScale'] > 1 &&
+                  questActiveList[key]['status'] != 'cleared'
+                "
+              />
+              <!-- </div> -->
               <div>
                 <p class="questName">
                   {{ questCondition["condition"][key].courseName }}
@@ -274,11 +287,13 @@ export default {
   text-decoration: underline solid black;
 }
 .card-panel .reward {
-  font-weight: bold;
-  text-align: right;
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
-  color: red;
-  padding: 0;
+  position: absolute;
+  width: 16%;
+  max-width: 80px;
+  height: auto;
+  top: 0;
+  right: 0;
+  margin: auto;
 }
 .card-panel a {
   color: black;
@@ -292,7 +307,7 @@ export default {
   text-align: right;
 }
 .inactive {
-  opacity: 0.1;
+  opacity: 0.2;
   background-color: white;
 }
 .cleared {

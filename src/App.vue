@@ -126,7 +126,4 @@ footer {
 font-awesome-icon {
   display: inline;
 }
-.row {
-  margin: 15px;
-}
 </style>

@@ -1,21 +1,55 @@
 <template>
   <body>
     <main>
-      <div v-if="isNotification" class="blinking notice center-align">
-        <p>通知が来ています</p>
-      </div>
-      <div v-if="isEmergency" class="blinking notice center-align">
-        <p>緊急Questが来ています</p>
-      </div>
-      <div v-if="!isNotification" class="center-align">
-        <p v-if="isCheckIn">QuestⅣ：チェックイン中</p>
-      </div>
-      <div class="chart-container">
-        <RadarChart
-          class="radar"
-          :chartData="datacollection"
-          :options="options"
-        />
+      <div class="row">
+        <div class="col s12">
+          <div v-if="isNotification" class="blinking notice center-align">
+            <p>通知が来ています</p>
+          </div>
+        </div>
+        <div class="col s12">
+          <div v-if="isEmergency" class="blinking notice center-align">
+            <p>緊急Questが来ています</p>
+          </div>
+        </div>
+        <div class="col s12">
+          <div
+            v-if="!isNotification && !isEmergency"
+            class="checkIn center-align"
+          >
+            <p v-if="isCheckIn">QuestⅣ：チェックイン中</p>
+          </div>
+        </div>
+        <div class="col s12">
+          <div class="chart-container">
+            <RadarChart
+              class="radar"
+              :chartData="datacollection"
+              :options="options"
+            />
+          </div>
+        </div>
+        <div v-if="isCheckIn && point < 10" class="skill col s12">
+          <p class="center">魔獣を倒して引換券を手に入れよう！</p>
+          <a>獲得報酬</a>
+          <div class="progress">
+            <div class="determinate" :style="{ width: healthBar() }"></div>
+          </div>
+          <a class="right">引換券獲得まであと：{{ 10 - point }}</a>
+        </div>
+        <div v-if="isCheckIn && point >= 10" class="skill col s12">
+          <p class="center" style="color: lime">引換券を手に入れた！</p>
+          <div class="card-panel z-depth-2 row">
+            <img class="coupon col s4" src="@/assets/coupon.png" />
+            <div class="col s8">
+              <p class="cardTitle">引換券</p>
+              <p class="message">
+                ロボット研究所で好きな飲み物と交換できます！<br />
+                終了時間までにロボット研究所に寄って声をかけてください！
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   </body>
@@ -97,6 +131,7 @@ export default {
       isEmergency: false,
       isRead: false,
       unsubscribe: null,
+      point: 0,
     };
   },
   mounted() {
@@ -158,6 +193,7 @@ export default {
             querySnapshot.forEach((doc) => {
               this.noticeList = doc.data().noticeList;
               this.emergencyQuest = doc.data().emergencyQuest;
+              this.point = doc.data().mysteryCounter;
             });
             this.checkNotification();
             this.checkEmergencyQuest();
@@ -253,6 +289,16 @@ export default {
         this.isEmergency = false;
       }
     },
+    healthBar() {
+      if (this.point > 10) {
+        this.point = 10;
+      } else if (this.point < 0) {
+        this.point = 0;
+      }
+      let percent = 10 * this.point;
+      let style = percent + "%";
+      return style;
+    },
   },
 };
 </script>
@@ -262,17 +308,18 @@ export default {
   background-color: Red;
   margin: 5px;
 }
+.checkIn p {
+  margin: 0px;
+}
 .chart-container {
   width: 100%;
   padding-bottom: 100%;
 }
-.container {
-  display: flex;
-  width: 100%;
-  height: 100%;
+.row .col {
+  padding: 0;
+  margin: 0;
 }
 .row {
-  display: flex;
   height: 100%;
   width: 100%;
 }
@@ -322,5 +369,40 @@ export default {
   100% {
     opacity: 1;
   }
+}
+.skill {
+  margin: 7vmax;
+}
+.skill p {
+  font-size: 15px;
+  margin-top: 12vmax;
+}
+.skill a {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+.progress {
+  position: relative;
+  height: 15px;
+  display: block;
+  top: 80%;
+  width: 100%;
+  background-color: black;
+  border-radius: 2px;
+  margin: 0.5rem 0 1rem 0;
+  overflow: hidden;
+  margin: 0px;
+}
+.progress .determinate {
+  background-color: lime;
+  -webkit-transition: width 0.3s linear;
+  transition: width 0.3s linear;
+}
+.coupon {
+  width: 200px;
+  height: auto;
+  transform: rotate(30deg);
+}
+.col .row {
+  margin: 0;
 }
 </style>

@@ -12,7 +12,7 @@ export default new Vuex.Store({
     load_status: false,
     unsubscribeSnapshot: null,
     userCollection: 'users',
-    accesslogCollection: month + '_access_log',
+    accesslogCollection: '0807_access_log',
     notificationCollection: 'notification',
     labStatusCollection: 'lab_status',
     statusCollection: month + '_status',

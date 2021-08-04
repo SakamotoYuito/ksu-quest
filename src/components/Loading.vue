@@ -57,8 +57,8 @@ export default {
       let courseId = this.place.split("/")[0];
       if (courseId in dbList["questActiveList"]) {
         dbList["questActiveList"][courseId]["status"] = "cleared";
-        dbList["mysteryCounter"] += 1;
         pointScale = dbList["questActiveList"][courseId]["pointScale"];
+        dbList["mysteryCounter"] += pointScale;
       }
       urlStatus.forEach((element) => {
         let key = element.split(":")[0];
@@ -70,6 +70,10 @@ export default {
       }
       if (courseId == "emergency") {
         dbList["emergencyQuest"]["status"] = "cleared";
+      }
+      if (dbList["mysteryCounter"] >= 10) {
+        dbList["noticeList"][1]["isDisplay"] = true;
+        console.log(dbList["noticeList"]);
       }
       return dbList;
     },

@@ -137,4 +137,8 @@ export default {
 </script>
 
 <style>
+footer .row {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
 </style>
