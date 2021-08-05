@@ -22,7 +22,18 @@ export default {
   },
   methods: {
     onDecode(decodedString) {
-      this.$router.push({ path: decodedString });
+
+      let baseUrl = "https://ksu-quest.com/";
+      let url;
+      
+      if (decodedString.includes(baseUrl)){
+        url = decodedString.split(baseUrl)[1];
+      }
+      else {
+        url = decodedString;
+      }
+
+      this.$router.push({ path: url });
       this.isShow = true;
     },
     async onInit(promise) {
